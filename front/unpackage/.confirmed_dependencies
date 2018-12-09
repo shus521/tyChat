@@ -1,0 +1,13 @@
+{
+	"index.html": {
+		"resources": [
+			"chatList.html"
+		],
+		"refer": [
+			"contact.html",
+			"discover.html",
+			"myHome.html",
+			"chatList.html"
+		]
+	}
+}
