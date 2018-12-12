@@ -9,7 +9,7 @@ import tk.mybatis.spring.annotation.MapperScan;
 @SpringBootApplication(exclude= {DataSourceAutoConfiguration.class})
 //扫描mybasic mapper的包路径
 @MapperScan(basePackages = "com.tyss.mapper")
-@ComponentScan(basePackages= {"com.tyss"})
+@ComponentScan(basePackages= {"com.tyss", "org.n3r.idworker"})
 public class Application {
 	public static void main(String[] args) {
 		SpringApplication.run(Application.class, args);
