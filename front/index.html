@@ -67,6 +67,12 @@
 		};
 		
 		mui.plusReady(function() {
+			
+			//禁止后退
+			mui.back = function() {
+				return false;
+			}
+			
 			var indexWebview = plus.webview.currentWebview();
 			
 			for (var i = 0;i < tyArray.length; i++) {
@@ -74,18 +80,16 @@
 				tyPage.hide();
 				indexWebview.append(tyPage);
 			}
-			alert(tyArray[0].pageId);
 			plus.webview.show(tyArray[0].pageId);
 			
 			
 			//批量绑定tap事件，展示页面
 			mui(".mui-bar-tab").on("tap", "a", function() {
 				var tabIndex = this.getAttribute("tabIndex");
-				
 				plus.webview.show(tyArray[tabIndex].pageId, "fade-in", 200);
 				for (var i = 0;i < tyArray.length; i++) {
 					if(i != tabIndex) {
-						plus.webview.hide(tyArray[tabIndex].pageId, "fade-out", 200);
+						plus.webview.hide(tyArray[i].pageId, "fade-out", 200);
 					}
 				}
 			});

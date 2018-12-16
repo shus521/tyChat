@@ -1,2 +1,3 @@
 back/target/*
 back/.idea/*
+back/src/main/resources/application.properties

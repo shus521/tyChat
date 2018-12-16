@@ -6,7 +6,7 @@ import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.context.annotation.ComponentScan;
 import tk.mybatis.spring.annotation.MapperScan;
 
-@SpringBootApplication(exclude= {DataSourceAutoConfiguration.class})
+@SpringBootApplication
 //扫描mybasic mapper的包路径
 @MapperScan(basePackages = "com.tyss.mapper")
 @ComponentScan(basePackages= {"com.tyss", "org.n3r.idworker"})

@@ -9,5 +9,11 @@
 			"myHome.html",
 			"chatList.html"
 		]
+	},
+	"login.html": {
+		"refer": [
+			"login.html",
+			"index.html"
+		]
 	}
 }

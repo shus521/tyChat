@@ -6,7 +6,7 @@
 		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
 		<title></title>
 		<script src="js/mui.min.js"></script>
-
+		
 		<link rel="stylesheet" type="text/css" href="css/registLogin/util.css">
 		<link rel="stylesheet" type="text/css" href="css/registLogin/main.css">
 
@@ -81,10 +81,10 @@
 			
 			mui.plusReady(function() {
 				
-				// 判断用户是否注册登录过，如果本地内存有全局的用户对象，此时直接跳转到首页
+				//判断用户是否已登录
 				var userInfo = app.getUserGlobalInfo();
-				if (userInfo != null) {
-					// 页面跳转
+				if(userInfo != null) {
+					//页面跳转
 					mui.openWindow("index.html", "index.html");
 				}
 				
@@ -92,32 +92,27 @@
 				var username = document.getElementById("username");
 				var txt_password = document.getElementById("txt_password");
 				
-				userform.addEventListener("submit", function(e){
-					// 判断用户名是否为空，如果为空则让其获得焦点
-					if (!app.isNotNull(username.value)) {
-						// 获取焦点
+				userform.addEventListener("submit", function(e) {
+					if(!app.isNotNull(username.value)) {
 						username.focus();
-					} else if (!app.isNotNull(txt_password.value)) {
-						// 获取焦点
+					} else if(!app.isNotNull(txt_password.value)) {
 						txt_password.focus();
 					} else {
-						// 判断用户名和密码的长度，进行限制
-						if (username.value.length > 12) {
-							app.showToast("用户名不能超过12", "error");
+						if(username.value.length>12) {
+							app.showTip("用户名不能超过12","error");
 							return false;
-						} else if (txt_password.value.length > 12) {
-							app.showToast("密码不能超过12", "error");
+						} else if(txt_password.value.length>12) {
+							app.showTip("密码不能超过12","error");
 							return false;
 						}
 						
-						// 获取每台手机的唯一cid
 						var cid = plus.push.getClientInfo().clientid;
-						// 与后端联调
+						//发送请求
 						mui.ajax(app.serverUrl + "/u/registOrLogin",{
 							data:{
 								username:username.value,
 								password:txt_password.value,
-								cid: cid
+								cid:cid
 							},
 							dataType:'json',//服务器返回json格式数据
 							type:'post',//HTTP请求类型
@@ -125,32 +120,27 @@
 							headers:{'Content-Type':'application/json'},	              
 							success:function(data){
 								//服务器返回响应，根据响应结果，分析是否登录成功；
-//								console.log(JSON.stringify(data));
-								
+								console.log(JSON.stringify(data));
 								username.blur();
 								txt_password.blur();
-								
-								if (data.status == 200) {
-									// 登录或者注册成功之后，保存全局用户对象到本地缓存
+								if(data.status == 200) {
+									//保存全局用户对象到本地缓存
 									var userInfoJson = data.data;
 									app.setUserGlobalInfo(userInfoJson);
 									
-									// 页面跳转
+									//页面跳转
 									mui.openWindow("index.html", "index.html");
 								} else {
-									app.showToast(data.msg, "error");
+									app.showTip(data.msg,"error");
+									return false;
 								}
 							}
 						});
-						
 					}
-					
-					
-					// 阻止默认时间，阻止默认表单提交
+					//阻止默认表单提交
 					e.preventDefault();
 				});
 			})
-			
 		</script>
 
 	</body>
