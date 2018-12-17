@@ -146,6 +146,20 @@
 					"index.html"
 				],
 				"priority": 0
+			},
+			"myHome.html": {
+				"resources": [],
+				"refer": [
+					"myFace.html"
+				],
+				"priority": 0
+			},
+			"myFace.html": {
+				"resources": [],
+				"refer": [
+					"plugin/v3.1.6/myface-uploader.html"
+				],
+				"priority": 0
 			}
 		},
 		"idle": {

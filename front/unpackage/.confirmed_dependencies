@@ -15,5 +15,15 @@
 			"login.html",
 			"index.html"
 		]
+	},
+	"myHome.html": {
+		"refer": [
+			"myFace.html"
+		]
+	},
+	"myFace.html": {
+		"refer": [
+			"plugin/v3.1.6/myface-uploader.html"
+		]
 	}
 }

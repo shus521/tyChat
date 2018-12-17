@@ -13,7 +13,7 @@
 		<div class="mui-content">
 		    <ul class="mui-table-view">
 		        <li class="mui-table-view-cell mui-media">
-		            <a href="javascript:;">
+		            <a href="javascript:;" id="link_my_face">
 		            	<span class="mui-pull-right mui-icon mui-icon-arrowright" style="line-height: 42px;color: lightgrey; margin-left: 3px;"></span>
 		                <img class="mui-media-object mui-pull-right" id="img_my_face" src="css/registLogin/arrow.jpg">
 		                <div class="mui-media-body" style="line-height: 42px;font-size: 16px;">
@@ -69,6 +69,12 @@
 				var meWebView = plus.webview.currentWebview();
 				meWebView.addEventListener("show", function() {
 					refreshUserInfo();
+				});
+				
+				//页面跳转我的头像
+				var link_my_face = document.getElementById("link_my_face");
+				link_my_face.addEventListener("tap", function() {
+					mui.openWindow("myFace.html", "myFace.html");
 				});
 			});
 			

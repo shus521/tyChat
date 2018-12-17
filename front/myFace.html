@@ -1,0 +1,85 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="css/mui.min.css" rel="stylesheet" />
+		<link rel="stylesheet" href="css/header.css" />
+	</head>
+
+	<body>
+		
+		<header class="mui-bar mui-bar-nav title">
+		    <a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left" style="color: white;"></a>
+		    <a id="open_menu" class="mui-icon mui-icon-right-nav mui-pull-right" style="color: white;">...</a>
+		    <h1 class="mui-title title-color">个人头像</h1>
+		</header>
+		<div class="mui-content" id="div_my_face">
+		    <img id="img_my_face" src="css/registLogin/arrow.jpg" />
+		</div>
+		
+		<div id="sheet_my_face" class="mui-popover mui-popover-bottom mui-popover-action ">
+		    <!-- 可选择菜单 -->
+		    <ul class="mui-table-view">
+		      <li class="mui-table-view-cell">
+		        <a id="link_choose_photo" href="#">选择头像</a>
+		      </li>
+		      <li class="mui-table-view-cell">
+		        <a id="link_download_photo" href="#">保存头像</a>
+		      </li>
+		    </ul>
+		    <!-- 取消菜单 -->
+		    <ul class="mui-table-view">
+		      <li class="mui-table-view-cell">
+		        <a href="#sheet_my_face"><b>取消</b></a>
+		      </li>
+		    </ul>
+		</div>
+		
+		<script src="js/mui.min.js"></script>
+		<script type="text/javascript" src="js/app.js" ></script>
+		<script type="text/javascript">
+			mui.init();
+			
+			mui.plusReady(function() {
+				var user = app.getUserGlobalInfo();
+				var img_my_face = document.getElementById("img_my_face");
+				var div_my_face = document.getElementById("div_my_face");
+				if(user != null) {
+					var faceImg = user.faceImage;
+					if(app.isNotNull(faceImg)) {
+						img_my_face.src = app.fileUrl + faceImg;
+					}
+				}
+				
+				//设置图片的大小
+				var imgWidth = document.body.clientWidth;
+				var screenHeight = document.body.clientHeight;
+				img_my_face.width = imgWidth;
+				img_my_face.height = imgWidth;
+				
+				var open_menu = document.getElementById("open_menu");
+				open_menu.addEventListener("tap", function() {
+					mui("#sheet_my_face").popover("toggle");
+				});
+				
+				
+				//绑定选择头像按钮
+				var link_choose_photo = document.getElementById("link_choose_photo");
+				link_choose_photo.addEventListener("tap", function() {
+					mui.openWindow("plugin/v3.1.6/myface-uploader.html", "myface-uploader.html");
+					mui("#sheet_my_face").popover("toggle");
+				});
+				
+				//绑定保存头像按钮
+				var link_download_photo = document.getElementById("link_download_photo");
+				link_download_photo.addEventListener("tap", function() {
+					
+				});
+			});
+		</script>
+	</body>
+
+</html>
