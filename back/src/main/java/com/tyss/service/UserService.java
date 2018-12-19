@@ -1,6 +1,7 @@
 package com.tyss.service;
 
 import com.tyss.pojo.Users;
+import org.apache.catalina.User;
 
 public interface UserService {
     /**
@@ -24,4 +25,10 @@ public interface UserService {
      * @return
      */
     public Users saveUser(Users user);
+
+    /**
+     * 修改用户信息
+     * @param user
+     */
+    public Users updateUserInfo(Users user);
 }

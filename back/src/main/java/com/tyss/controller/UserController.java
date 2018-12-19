@@ -1,20 +1,27 @@
 package com.tyss.controller;
 
 import com.tyss.pojo.Users;
+import com.tyss.pojo.bo.UsersBO;
 import com.tyss.pojo.vo.UsersVO;
 import com.tyss.service.UserService;
+import com.tyss.utils.FastDFSClient;
+import com.tyss.utils.FileUtils;
 import com.tyss.utils.IMoocJSONResult;
 import com.tyss.utils.MD5Utils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("u")
 public class UserController {
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private FastDFSClient fastDFSClient;
 
     @PostMapping("/registOrLogin")
     public IMoocJSONResult registOrLogin(@RequestBody Users user) throws Exception {
@@ -44,5 +51,33 @@ public class UserController {
         BeanUtils.copyProperties(userResult, usersVO);
 
         return IMoocJSONResult.ok(usersVO);
+    }
+
+
+    @PostMapping("/uploadFaceBase64")
+    public IMoocJSONResult uploadFaceBase64(@RequestBody UsersBO usersBO) throws Exception {
+        /* 获取前端上传的base64字符串，转换为文件对象 */
+        String base64Data = usersBO.getFaceData();
+        String userFacePath = "E:\\" + usersBO.getUserId() + "userface64.png";
+        FileUtils.base64ToFile(userFacePath, base64Data);
+
+        //上传文件到fastDFS
+        MultipartFile multipartFile= FileUtils.fileToMultipart(userFacePath);
+        String url = fastDFSClient.uploadBase64(multipartFile);
+        System.out.println(url);
+
+        String thump = "_80x80.";
+        String arr[] = url.split("\\.");
+        String thumpImgUrl = arr[0] + thump + arr[1];
+
+
+        Users users = new Users();
+        users.setId(usersBO.getUserId());
+        users.setFaceImage(thumpImgUrl);
+        users.setFaceImageBig(url);
+
+        userService.updateUserInfo(users);
+
+        return IMoocJSONResult.ok(users);
     }
 }
