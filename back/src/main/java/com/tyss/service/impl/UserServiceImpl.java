@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import tk.mybatis.mapper.entity.Example;
 
+import java.io.File;
 import java.io.IOException;
 
 @Service
@@ -59,10 +60,18 @@ public class UserServiceImpl implements UserService {
         String qrcodePath ="E://ty/user" + userId + "qrcode.png";
         qrCodeUtils.createQRCode(qrcodePath, "ty_qrcode:" + user.getUsername());
         MultipartFile multipartFile= FileUtils.fileToMultipart(qrcodePath);
+
         String qrCodeUrl = "";
         try {
             qrCodeUrl = fastDFSClient.uploadQRCode(multipartFile);
         } catch (IOException e) {
+            e.printStackTrace();
+        }
+        //删除文件
+        try {
+            File file = new File(qrcodePath);
+            file.delete();
+        } catch (Exception e) {
             e.printStackTrace();
         }
         user.setQrcode(qrCodeUrl);

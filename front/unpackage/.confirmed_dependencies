@@ -9,7 +9,8 @@
 			"myHome.html",
 			"chatList.html",
 			"myself/myHome.html",
-			"html/myself/myHome.html"
+			"html/myself/myHome.html",
+			"html/direction/discover.html"
 		]
 	},
 	"login.html": {

@@ -78,7 +78,28 @@
 				//绑定保存头像按钮
 				var link_download_photo = document.getElementById("link_download_photo");
 				link_download_photo.addEventListener("tap", function() {
+					plus.nativeUI.showWaiting( "下载中..." );
 					
+					var dtask = plus.downloader.createDownload(
+						app.fileUrl + faceImg, 
+						{},
+						function(d, status) {
+							// 下载完成
+							if(status == 200) {
+								plus.nativeUI.closeWaiting();
+								console.log("Download success: " + d.filename);
+		
+								plus.gallery.save( d.filename, function () {
+									app.showTip( "保存头像到相册成功", "success" );
+								});
+		
+							} else {
+								plus.nativeUI.closeWaiting();
+								console.log("Download failed: " + status);
+							}
+							mui("#sheet_my_face").popover("toggle");
+						});
+					dtask.start();
 				});
 			});
 		</script>

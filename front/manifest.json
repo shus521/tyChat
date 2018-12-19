@@ -137,7 +137,8 @@
 					"discover.html",
 					"myHome.html",
 					"myself/myHome.html",
-					"html/myself/myHome.html"
+					"html/myself/myHome.html",
+					"html/direction/discover.html"
 				],
 				"priority": 0
 			},
