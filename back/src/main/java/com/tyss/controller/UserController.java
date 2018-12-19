@@ -80,4 +80,21 @@ public class UserController {
 
         return IMoocJSONResult.ok(users);
     }
+
+    @PostMapping("/setNickname")
+    public IMoocJSONResult setNickname(@RequestBody UsersBO usersBO) throws Exception {
+        if ("".equals(usersBO.getNickname()) || usersBO.getNickname() == null) {
+            return IMoocJSONResult.errorMsg("昵称不合法");
+        }
+        if (8< usersBO.getNickname().length() || 0 > usersBO.getNickname().length()) {
+            return IMoocJSONResult.errorMsg("昵称长度不合法");
+        }
+        Users users = new Users();
+        users.setId(usersBO.getUserId());
+        users.setNickname(usersBO.getNickname());
+
+        userService.updateUserInfo(users);
+
+        return IMoocJSONResult.ok(users);
+    }
 }

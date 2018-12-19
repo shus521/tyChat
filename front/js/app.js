@@ -32,7 +32,13 @@ window.app = {
 	 */
 	getUserGlobalInfo: function() {
 		return JSON.parse(plus.storage.getItem("userInfo"));
-	}
+	},
 	
+	/**
+	 * 登出
+	 */
+	userLogout: function() {
+		plus.storage.removeItem("userInfo");
+	}
 	
 }

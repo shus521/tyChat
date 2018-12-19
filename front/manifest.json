@@ -135,7 +135,9 @@
 				"refer": [
 					"contact.html",
 					"discover.html",
-					"myHome.html"
+					"myHome.html",
+					"myself/myHome.html",
+					"html/myself/myHome.html"
 				],
 				"priority": 0
 			},
@@ -150,11 +152,29 @@
 			"myHome.html": {
 				"resources": [],
 				"refer": [
-					"myFace.html"
+					"myFace.html",
+					"login.html",
+					"myNickname.html"
 				],
 				"priority": 0
 			},
 			"myFace.html": {
+				"resources": [],
+				"refer": [
+					"plugin/v3.1.6/myface-uploader.html"
+				],
+				"priority": 0
+			},
+			"html/myself/myHome.html": {
+				"resources": [],
+				"refer": [
+					"html/myself/myFace.html",
+					"html/myself/myNickname.html",
+					"login.html"
+				],
+				"priority": 0
+			},
+			"html/myself/myFace.html": {
 				"resources": [],
 				"refer": [
 					"plugin/v3.1.6/myface-uploader.html"

@@ -5,7 +5,7 @@
 		<meta charset="UTF-8">
 		<title></title>
 		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
-		<link href="css/mui.min.css" rel="stylesheet" />
+		<link href="../../css/mui.min.css" rel="stylesheet" />
 	</head>
 
 	<body>
@@ -22,7 +22,7 @@
 		            </a>
 		        </li>
 		        <li class="mui-table-view-cell mui-media">
-		            <a href="javascript:;">
+		            <a href="javascript:;" id="link_my_nickname">
 		                <span class="mui-pull-right mui-icon mui-icon-arrowright" style="color: lightgrey; margin-left: 3px;"></span>
 		                <span id="span_nickname" class="mui-pull-right" style="color: grey;font-size: 14px;"></span>
 		                <div class="mui-media-body">
@@ -52,7 +52,7 @@
 		    <br />
 		    <ul class="mui-table-view">
 		    	<li class="mui-table-view-cell mui-media" style="text-align: center;">
-		            <a href="javascript:;">
+		            <a id="link_logout" href="javascript:;">
 		                <div class="mui-media-body">
 		                    退出登录
 		                </div>
@@ -60,8 +60,8 @@
 		        </li>
 		    </ul>
 		</div>
-		<script src="js/mui.min.js"></script>
-		<script type="text/javascript" src="js/app.js" ></script>
+		<script src="../../js/mui.min.js"></script>
+		<script type="text/javascript" src="../../js/app.js" ></script>
 		<script type="text/javascript">
 			mui.init();
 			mui.plusReady(function() {
@@ -75,6 +75,21 @@
 				var link_my_face = document.getElementById("link_my_face");
 				link_my_face.addEventListener("tap", function() {
 					mui.openWindow("myFace.html", "myFace.html");
+				});
+				
+				
+				//页面跳转昵称修改
+				var link_my_nickname = document.getElementById("link_my_nickname");
+				link_my_nickname.addEventListener("tap", function() {
+					mui.openWindow("myNickname.html", "myNickname.html");
+				});
+				
+				
+				//用户退出
+				var link_logout = document.getElementById("link_logout");
+				link_logout.addEventListener("tap", function() {
+					app.userLogout();
+					mui.openWindow("../../login.html", "login.html");
 				});
 				
 				

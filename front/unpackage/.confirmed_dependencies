@@ -7,7 +7,9 @@
 			"contact.html",
 			"discover.html",
 			"myHome.html",
-			"chatList.html"
+			"chatList.html",
+			"myself/myHome.html",
+			"html/myself/myHome.html"
 		]
 	},
 	"login.html": {
@@ -18,10 +20,24 @@
 	},
 	"myHome.html": {
 		"refer": [
-			"myFace.html"
+			"myFace.html",
+			"login.html",
+			"myNickname.html"
 		]
 	},
 	"myFace.html": {
+		"refer": [
+			"plugin/v3.1.6/myface-uploader.html"
+		]
+	},
+	"html/myself/myHome.html": {
+		"refer": [
+			"html/myself/myFace.html",
+			"html/myself/myNickname.html",
+			"login.html"
+		]
+	},
+	"html/myself/myFace.html": {
 		"refer": [
 			"plugin/v3.1.6/myface-uploader.html"
 		]
