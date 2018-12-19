@@ -1,6 +1,6 @@
 window.app = {
 	serverUrl : 'http://192.168.43.200:8080',
-	fileUrl : '',
+	fileUrl : 'http://47.93.36.58:88/ty/',
 	/**
 	 * 判断字符串是否为空
 	 * @param {Object} str

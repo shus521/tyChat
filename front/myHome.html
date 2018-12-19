@@ -76,6 +76,12 @@
 				link_my_face.addEventListener("tap", function() {
 					mui.openWindow("myFace.html", "myFace.html");
 				});
+				
+				
+				//添加自定义事件刷新头像
+				window.addEventListener("refresh", function() {
+					refreshUserInfo();
+				});
 			});
 			
 			function refreshUserInfo() {

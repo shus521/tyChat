@@ -69,7 +69,9 @@
 				//绑定选择头像按钮
 				var link_choose_photo = document.getElementById("link_choose_photo");
 				link_choose_photo.addEventListener("tap", function() {
-					mui.openWindow("plugin/v3.1.6/myface-uploader.html", "myface-uploader.html");
+					mui.openWindow({url: "plugin/v3.1.6/myface-uploader.html", 
+								id: "myface-uploader.html", createNew: true});
+					//mui.openWindow("plugin/v3.1.6/myface-uploader.html", "myface-uploader.html");
 					mui("#sheet_my_face").popover("toggle");
 				});
 				
