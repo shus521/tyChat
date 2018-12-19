@@ -170,7 +170,8 @@
 				"refer": [
 					"html/myself/myFace.html",
 					"html/myself/myNickname.html",
-					"login.html"
+					"login.html",
+					"html/myself/myQrcode.html"
 				],
 				"priority": 0
 			},

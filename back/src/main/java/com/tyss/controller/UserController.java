@@ -76,9 +76,9 @@ public class UserController {
         users.setFaceImage(thumpImgUrl);
         users.setFaceImageBig(url);
 
-        userService.updateUserInfo(users);
+        Users user = userService.updateUserInfo(users);
 
-        return IMoocJSONResult.ok(users);
+        return IMoocJSONResult.ok(user);
     }
 
     @PostMapping("/setNickname")
@@ -93,8 +93,7 @@ public class UserController {
         users.setId(usersBO.getUserId());
         users.setNickname(usersBO.getNickname());
 
-        userService.updateUserInfo(users);
-
-        return IMoocJSONResult.ok(users);
+        Users user = userService.updateUserInfo(users);
+        return IMoocJSONResult.ok(user);
     }
 }

@@ -39,9 +39,9 @@
 		            </a>
 		        </li>
 		        <li class="mui-table-view-cell mui-media">
-		            <a href="javascript:;">
+		            <a href="javascript:;" id="link_qrcode">
 		            	<span class="mui-pull-right mui-icon mui-icon-arrowright" style="color: lightgrey; margin-left: 3px;"></span>
-		                <img class="mui-media-object mui-pull-right" id="img_qrcode" src="image/qrcode.png" style="max-width: 20px;height: 20px;">
+		                <img class="mui-media-object mui-pull-right" id="img_qrcode" src="../../image/qrcode.png" style="max-width: 20px;height: 20px;">
 		                <div class="mui-media-body">
 		                    二维码
 		                </div>
@@ -82,6 +82,12 @@
 				var link_my_nickname = document.getElementById("link_my_nickname");
 				link_my_nickname.addEventListener("tap", function() {
 					mui.openWindow("myNickname.html", "myNickname.html");
+				});
+				
+				//二维码跳转
+				var link_qrcode = document.getElementById("link_qrcode");
+				link_qrcode.addEventListener("tap", function() {
+					mui.openWindow("myQrcode.html", "myQrcode.html");
 				});
 				
 				
