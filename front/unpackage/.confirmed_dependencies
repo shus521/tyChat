@@ -43,5 +43,10 @@
 		"refer": [
 			"plugin/v3.1.6/myface-uploader.html"
 		]
+	},
+	"html/direction/discover.html": {
+		"refer": [
+			"html/direction/seach.html"
+		]
 	}
 }

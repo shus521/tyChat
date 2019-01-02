@@ -182,6 +182,13 @@
 					"plugin/v3.1.6/myface-uploader.html"
 				],
 				"priority": 0
+			},
+			"html/direction/discover.html": {
+				"resources": [],
+				"refer": [
+					"html/direction/seach.html"
+				],
+				"priority": 0
 			}
 		},
 		"idle": {

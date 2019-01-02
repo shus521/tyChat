@@ -22,7 +22,7 @@
 		    </ul>
 		    <br />
 		    <ul class="mui-table-view">
-		        <li class="mui-table-view-cell mui-media">
+		        <li class="mui-table-view-cell mui-media" id="link_seach_friend">
 		                <img class="mui-media-object mui-pull-left" src="../../image/addfriends.png"
 		                	style="max-width: 24px;height: 24px;">
 		                <p class="mui-ellipsis" style="line-height: 24px;color: black;font-size: 16px;">
@@ -38,9 +38,16 @@
 		        </li>
 		    </ul>
 		</div>
-		<script src="js/mui.min.js"></script>
+		<script src="../../js/mui.min.js"></script>
 		<script type="text/javascript">
-			mui.init()
+			mui.init();
+			
+			mui.plusReady(function() {
+				var link_seach_friend = document.getElementById("link_seach_friend");
+				link_seach_friend.addEventListener("tap", function() {
+					mui.openWindow("seach.html","seach.html");
+				});
+			});
 		</script>
 	</body>
 
