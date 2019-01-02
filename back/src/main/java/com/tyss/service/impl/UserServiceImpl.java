@@ -1,6 +1,11 @@
 package com.tyss.service.impl;
 
+import com.tyss.enums.SearchFriendsStatusEnum;
+import com.tyss.mapper.FriendsRequestMapper;
+import com.tyss.mapper.MyFriendsMapper;
 import com.tyss.mapper.UsersMapper;
+import com.tyss.pojo.FriendsRequest;
+import com.tyss.pojo.MyFriends;
 import com.tyss.pojo.Users;
 import com.tyss.service.UserService;
 import com.tyss.utils.FastDFSClient;
@@ -17,19 +22,26 @@ import tk.mybatis.mapper.entity.Example;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Date;
 
+/**
+ * @author ty
+ */
 @Service
 public class UserServiceImpl implements UserService {
     @Autowired
     private UsersMapper usersMapper;
+
+    private FriendsRequestMapper friendsRequestMapper;
     @Autowired
     private Sid sid;
     @Autowired
     private QRCodeUtils qrCodeUtils;
     @Autowired
     private FastDFSClient fastDFSClient;
+    @Autowired
+    private MyFriendsMapper myFriendsMapper;
 
-    @Transactional(propagation = Propagation.SUPPORTS)
     @Override
     public boolean queryUsernameIsExist(String username) {
         Users user = new Users();
@@ -88,7 +100,64 @@ public class UserServiceImpl implements UserService {
     }
 
     @Transactional(propagation = Propagation.SUPPORTS)
+    @Override
+    public Integer seacherFriends(String myUserId, String friendUsername) {
+        Users user = queryUserByUsername(friendUsername);
+        if (user == null) {
+            return SearchFriendsStatusEnum.USER_NOT_EXIST.status;
+        }
+
+        if (user.getId().equals(myUserId)) {
+            return SearchFriendsStatusEnum.NOT_YOURSELF.status;
+        }
+
+        Example mfe = new Example(MyFriends.class);
+        Example.Criteria mfc = mfe.createCriteria();
+        mfc.andEqualTo("myUserId", myUserId);
+        mfc.andEqualTo("myFriendUserId", user.getId());
+        MyFriends myFriends = myFriendsMapper.selectOneByExample(mfe);
+        if (myFriends != null) {
+            return SearchFriendsStatusEnum.ALREADY_FRIENDS.status;
+        }
+        return SearchFriendsStatusEnum.SUCCESS.status;
+    }
+
+    @Transactional(propagation = Propagation.SUPPORTS)
     private Users queryUserById(String userId) {
         return usersMapper.selectByPrimaryKey(userId);
+    }
+
+    @Transactional(propagation = Propagation.SUPPORTS)
+    @Override
+    public Users queryUserByUsername(String username) {
+        Example ue = new Example(Users.class);
+        Example.Criteria uc = ue.createCriteria();
+        uc.andEqualTo("username", username);
+        return usersMapper.selectOneByExample(ue);
+    }
+
+    @Transactional(propagation = Propagation.REQUIRED)
+    @Override
+    public void sendFriendRequest(String myUserId, String friendUsername) {
+        //查询好友信息
+        Users friend = queryUserByUsername(friendUsername);
+        Example fre = new Example(FriendsRequest.class);
+        Example.Criteria frc = fre.createCriteria();
+        frc.andEqualTo("sendUserId", myUserId);
+        frc.andEqualTo("acceptUserId", friendUsername);
+        FriendsRequest friendsRequest = friendsRequestMapper.selectOneByExample(fre);
+        if (friendsRequest == null) {
+            //若非好友且无好友记录，则新增好友请求记录
+            String requestId = sid.nextShort();
+
+            FriendsRequest request = new FriendsRequest();
+            request.setId(requestId);
+            request.setSendUserId(myUserId);
+            request.setAcceptUserId(friend.getId());
+            request.setRequestDateTime(new Date());
+            friendsRequestMapper.insert(request);
+        }
+
+
     }
 }

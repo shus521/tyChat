@@ -1,5 +1,6 @@
 package com.tyss.controller;
 
+import com.tyss.enums.SearchFriendsStatusEnum;
 import com.tyss.pojo.Users;
 import com.tyss.pojo.bo.UsersBO;
 import com.tyss.pojo.vo.UsersVO;
@@ -81,6 +82,12 @@ public class UserController {
         return IMoocJSONResult.ok(user);
     }
 
+    /**
+     * 修改昵称
+     * @param usersBO
+     * @return
+     * @throws Exception
+     */
     @PostMapping("/setNickname")
     public IMoocJSONResult setNickname(@RequestBody UsersBO usersBO) throws Exception {
         if ("".equals(usersBO.getNickname()) || usersBO.getNickname() == null) {
@@ -95,5 +102,44 @@ public class UserController {
 
         Users user = userService.updateUserInfo(users);
         return IMoocJSONResult.ok(user);
+    }
+
+
+    @PostMapping("/searchUser")
+    public IMoocJSONResult searchUser(String myUserId, String friendUsername) throws Exception {
+        if (StringUtils.isBlank(myUserId)
+                || StringUtils.isBlank(friendUsername)) {
+            return IMoocJSONResult.errorMsg("");
+        }
+
+        Integer status = userService.seacherFriends(myUserId, friendUsername);
+        if (SearchFriendsStatusEnum.SUCCESS.status.equals(status)) {
+            Users user = userService.queryUserByUsername(friendUsername);
+            UsersVO usersVO = new UsersVO();
+            BeanUtils.copyProperties(user, usersVO);
+            return IMoocJSONResult.ok(usersVO);
+        } else {
+            String errMsg = SearchFriendsStatusEnum.getMsgByKey(status);
+            return IMoocJSONResult.errorMsg(errMsg);
+        }
+
+    }
+
+
+    @PostMapping("/addFriendRequest")
+    public IMoocJSONResult addFriendRequest(String myUserId, String friendUsername) throws Exception {
+        if (StringUtils.isBlank(myUserId)
+                || StringUtils.isBlank(friendUsername)) {
+            return IMoocJSONResult.errorMsg("");
+        }
+
+        Integer status = userService.seacherFriends(myUserId, friendUsername);
+        if (SearchFriendsStatusEnum.SUCCESS.status.equals(status)) {
+           userService.sendFriendRequest(myUserId, friendUsername);
+        } else {
+            String errMsg = SearchFriendsStatusEnum.getMsgByKey(status);
+            return IMoocJSONResult.errorMsg(errMsg);
+        }
+        return IMoocJSONResult.ok();
     }
 }

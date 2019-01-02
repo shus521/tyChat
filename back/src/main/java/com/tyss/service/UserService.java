@@ -31,4 +31,26 @@ public interface UserService {
      * @param user
      */
     public Users updateUserInfo(Users user);
+
+    /**
+     * 搜索好友
+     * @param myUserId
+     * @param friendUsername
+     * @return
+     */
+    public Integer seacherFriends(String myUserId, String friendUsername);
+
+    /**
+     * 获取好友信息
+     * @param friendUsername
+     * @return
+     */
+    public Users queryUserByUsername(String friendUsername);
+
+    /**
+     * 添加好友请求记录
+     * @param myUserId
+     * @param friendUsername
+     */
+    public void sendFriendRequest(String myUserId, String friendUsername);
 }
