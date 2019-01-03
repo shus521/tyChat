@@ -32,6 +32,7 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private UsersMapper usersMapper;
 
+    @Autowired
     private FriendsRequestMapper friendsRequestMapper;
     @Autowired
     private Sid sid;
@@ -144,7 +145,11 @@ public class UserServiceImpl implements UserService {
         Example fre = new Example(FriendsRequest.class);
         Example.Criteria frc = fre.createCriteria();
         frc.andEqualTo("sendUserId", myUserId);
-        frc.andEqualTo("acceptUserId", friendUsername);
+        frc.andEqualTo("acceptUserId", friend.getId());
+        System.out.println(fre.toString());
+
+        //若有脏数据这里会抛异常，待修复
+        //TODO
         FriendsRequest friendsRequest = friendsRequestMapper.selectOneByExample(fre);
         if (friendsRequest == null) {
             //若非好友且无好友记录，则新增好友请求记录

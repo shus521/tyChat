@@ -27,10 +27,9 @@
 		    <li class="mui-table-view-cell mui-media">
 		            <img class="mui-media-object mui-pull-left" src="../../css/registLogin/arrow.jpg" id="img_friend_pic">
 		            <div class="mui-media-body">
-						<p>
-							<span id="p_friend_name"></span> 
-							<button class="mui-pull-right" style="line-height: 25px;background-color: orangered;" id="button_add_friend">添加好友</button>
-						</p>
+						<p id="p_friend_name"></p>
+						<p >园聊号:<span id="p_friend_username"></span></p>
+						<button class="mui-pull-right" style="background-color: orangered;" id="button_add_friend">添加好友</button>
 		            </div>
 		        
 		    </li>
@@ -69,6 +68,8 @@
 									}
 									var p_friend_name = document.getElementById("p_friend_name");
 									p_friend_name.innerHTML = data.data.nickname;
+									var p_friend_username = document.getElementById("p_friend_username");
+									p_friend_username.innerHTML = data.data.username;
 									var div_friend = document.getElementById("div_friend");
 									div_friend.style.display = "block";
 								} else {
@@ -82,8 +83,13 @@
 				//添加好友
 				var button_add_firend = document.getElementById("button_add_friend");
 				button_add_firend.addEventListener("tap", function() {
+					var p_friend_username = document.getElementById("p_friend_username");
+					friendName = p_friend_username.innerHTML;
+					console.log(user.id);
+					console.log(friendName);
 					plus.nativeUI.showWaiting("请稍后");
-					mui.ajax(app.serverUrl + "/u/addFriendRequest", {
+					mui.ajax(app.serverUrl + "/u/addFriendRequest?myUserId=" +
+							user.id + "&friendUsername=" + friendName, {
 						data:{},
 						dataType:'json',//服务器返回json格式数据
 						type:'post',//HTTP请求类型
@@ -91,6 +97,12 @@
 						headers:{'Content-Type':'application/json'},
 						success:function(data) {
 							plus.nativeUI.closeWaiting();
+							if (data.status == 200) {
+								app.showTip('好友请求已发送', 'success');
+								mui.openWindow("../../index.html", "index.html");
+							} else {
+								app.showTip('添加失败', 'error');
+							}
 						}
 					})
 				})
