@@ -4,9 +4,11 @@ import com.tyss.enums.SearchFriendsStatusEnum;
 import com.tyss.mapper.FriendsRequestMapper;
 import com.tyss.mapper.MyFriendsMapper;
 import com.tyss.mapper.UsersMapper;
+import com.tyss.mapper.UsersMapperCustom;
 import com.tyss.pojo.FriendsRequest;
 import com.tyss.pojo.MyFriends;
 import com.tyss.pojo.Users;
+import com.tyss.pojo.vo.FriendRequestVO;
 import com.tyss.service.UserService;
 import com.tyss.utils.FastDFSClient;
 import com.tyss.utils.FileUtils;
@@ -23,6 +25,7 @@ import tk.mybatis.mapper.entity.Example;
 import java.io.File;
 import java.io.IOException;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @author ty
@@ -31,6 +34,9 @@ import java.util.Date;
 public class UserServiceImpl implements UserService {
     @Autowired
     private UsersMapper usersMapper;
+
+    @Autowired
+    private UsersMapperCustom usersMapperCustom;
 
     @Autowired
     private FriendsRequestMapper friendsRequestMapper;
@@ -164,5 +170,16 @@ public class UserServiceImpl implements UserService {
         }
 
 
+    }
+
+    /**
+     * 查询好友请求
+     * @param acceptUserId
+     * @return
+     */
+    @Transactional(propagation = Propagation.SUPPORTS)
+    @Override
+    public List<FriendRequestVO> queryFriendRequestList(String acceptUserId) {
+        return usersMapperCustom.queryFriendRequestList(acceptUserId);
     }
 }

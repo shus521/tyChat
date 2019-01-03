@@ -1,7 +1,10 @@
 package com.tyss.service;
 
 import com.tyss.pojo.Users;
+import com.tyss.pojo.vo.FriendRequestVO;
 import org.apache.catalina.User;
+
+import java.util.List;
 
 public interface UserService {
     /**
@@ -53,4 +56,11 @@ public interface UserService {
      * @param friendUsername
      */
     public void sendFriendRequest(String myUserId, String friendUsername);
+
+    /**
+     * 获取好友请求
+     * @param acceptUserId
+     * @return
+     */
+    public List<FriendRequestVO> queryFriendRequestList(String acceptUserId);
 }
