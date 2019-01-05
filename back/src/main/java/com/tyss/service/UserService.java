@@ -63,4 +63,18 @@ public interface UserService {
      * @return
      */
     public List<FriendRequestVO> queryFriendRequestList(String acceptUserId);
+
+    /**
+     * 删除好友请求记录
+     * @param sendUserId
+     * @param acceptUserId
+     */
+    public void deleteFriendRequest(String sendUserId, String acceptUserId);
+
+    /**
+     * 通过好友请求记录
+     * @param sendUserId
+     * @param acceptUserId
+     */
+    public void passFriendRequest(String sendUserId, String acceptUserId);
 }

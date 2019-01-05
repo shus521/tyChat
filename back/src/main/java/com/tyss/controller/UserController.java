@@ -1,5 +1,6 @@
 package com.tyss.controller;
 
+import com.tyss.enums.OperatorFriendRequestTypeEnum;
 import com.tyss.enums.SearchFriendsStatusEnum;
 import com.tyss.pojo.Users;
 import com.tyss.pojo.bo.UsersBO;
@@ -150,5 +151,40 @@ public class UserController {
         }
         //查询用户接收到的好友申请
         return IMoocJSONResult.ok(userService.queryFriendRequestList(userId));
+    }
+
+    /**
+     * 通过或者忽略好友请求
+     * @param acceptUserId
+     * @param sendUserId
+     * @param operType
+     * @return
+     * @throws Exception
+     */
+    @PostMapping("/operFriendRequest")
+    public IMoocJSONResult operFriendRequest(String acceptUserId, String sendUserId, Integer operType) throws Exception {
+        if (StringUtils.isBlank(acceptUserId) || StringUtils.isBlank(sendUserId) || operType == null) {
+            return IMoocJSONResult.errorMsg("");
+        }
+
+        //操作类型有误
+        if (StringUtils.isBlank(OperatorFriendRequestTypeEnum.getMsgByType(operType))) {
+            return IMoocJSONResult.errorMsg("");
+        }
+
+
+        if (OperatorFriendRequestTypeEnum.IGNORE.type.equals(operType)) {
+            //忽略好友请求，删除记录
+            userService.deleteFriendRequest(sendUserId, acceptUserId);
+        } else if (OperatorFriendRequestTypeEnum.PASS.type.equals(operType)){
+            //同意好友请求，删除记录，且添加好友
+            userService.passFriendRequest(sendUserId, acceptUserId);
+        }
+
+
+
+        return IMoocJSONResult.errorMsg("");
+        //查询用户接收到的好友申请
+//        return IMoocJSONResult.ok(userService.queryFriendRequestList(userId));
     }
 }

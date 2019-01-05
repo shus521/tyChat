@@ -152,7 +152,6 @@ public class UserServiceImpl implements UserService {
         Example.Criteria frc = fre.createCriteria();
         frc.andEqualTo("sendUserId", myUserId);
         frc.andEqualTo("acceptUserId", friend.getId());
-        System.out.println(fre.toString());
 
         //若有脏数据这里会抛异常，待修复
         //TODO
@@ -181,5 +180,33 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<FriendRequestVO> queryFriendRequestList(String acceptUserId) {
         return usersMapperCustom.queryFriendRequestList(acceptUserId);
+    }
+
+    @Transactional(propagation = Propagation.REQUIRED)
+    @Override
+    public void deleteFriendRequest(String sendUserId, String acceptUserId) {
+        Example fre = new Example(FriendsRequest.class);
+        Example.Criteria frc = fre.createCriteria();
+        frc.andEqualTo("sendUserId", sendUserId);
+        frc.andEqualTo("acceptUserId", acceptUserId);
+        friendsRequestMapper.deleteByExample(fre);
+    }
+
+    @Transactional(propagation = Propagation.REQUIRED)
+    @Override
+    public void passFriendRequest(String sendUserId, String acceptUserId) {
+        saveFriends(sendUserId, acceptUserId);
+        saveFriends(acceptUserId, sendUserId);
+        deleteFriendRequest(sendUserId, acceptUserId);
+    }
+
+    @Transactional(propagation = Propagation.REQUIRED)
+    private void saveFriends(String sendUserId, String acceptUserId) {
+        MyFriends myFriends = new MyFriends();
+        String recordId = sid.nextShort();
+        myFriends.setId(recordId);
+        myFriends.setMyUserId(sendUserId);
+        myFriends.setMyFriendUserId(acceptUserId);
+        myFriendsMapper.insert(myFriends);
     }
 }
