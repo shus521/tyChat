@@ -52,6 +52,17 @@
 								}
 							}
 							ul_friend_request_list.innerHTML = requestHtml;
+							
+							//忽略
+							mui(".btnOper").on("tap",".ignoreRequest", function(e) {
+								var friendId = this.getAttribute("friendId");
+								operatorFriendRequest(user.id, friendId, 0);
+							});
+							//同意
+							mui(".btnOper").on("tap",".passRequest", function(e) {
+								var friendId = this.getAttribute("friendId");
+								operatorFriendRequest(user.id, friendId, 1);
+							});
 						} else {
 							
 						}
@@ -62,6 +73,25 @@
 				});
 			}
 			
+			
+			// 操作好友请求
+			function operatorFriendRequest(userId, friendId, operType) {
+				console.log(userId);
+				console.log(friendId);
+				console.log(operType);
+				mui.ajax(app.serverUrl + "/u/operFriendRequest?acceptUserId=" + userId
+												+ "&sendUserId=" + friendId
+												+ "&operType=" + operType,{
+					data:{},
+					dataType:'json',//服务器返回json格式数据
+					type:'post',//HTTP请求类型
+					timeout:10000,//超时时间设置为10秒；
+					headers:{'Content-Type':'application/json'},	              
+					success:function(data){
+
+					}
+				});
+			}
 			
 			//拼接好友请求
 			function renderFriendRequests(friend) {
