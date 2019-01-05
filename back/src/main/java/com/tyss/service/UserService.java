@@ -2,6 +2,7 @@ package com.tyss.service;
 
 import com.tyss.pojo.Users;
 import com.tyss.pojo.vo.FriendRequestVO;
+import com.tyss.pojo.vo.MyFriendsVO;
 import org.apache.catalina.User;
 
 import java.util.List;
@@ -77,4 +78,11 @@ public interface UserService {
      * @param acceptUserId
      */
     public void passFriendRequest(String sendUserId, String acceptUserId);
+
+    /**
+     * 查询好友列表
+     * @param userId
+     * @return
+     */
+    public List<MyFriendsVO> queryMyFriends(String userId);
 }

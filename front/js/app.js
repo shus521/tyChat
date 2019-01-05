@@ -39,6 +39,28 @@ window.app = {
 	 */
 	userLogout: function() {
 		plus.storage.removeItem("userInfo");
+	},
+	
+	/**
+	 * 通讯录缓存
+	 * @param {Object} contactList
+	 */
+	setContactList: function(contactList) {
+		var contactListStr = JSON.stringify(contactList);
+		plus.storage.setItem("contactList", contactListStr);
+	},
+	
+	/**
+	 * 获取本地缓存种的联系人列表
+	 */
+	getContactList: function() {
+		var contactList = plus.storage.getItem("contactList");
+		if (!this.isNotNull(contactList)) {
+//			console.log("33333333");
+			return [];
+		}
+//		console.log("454545" + JSON.stringify(JSON.parse(contactList)));
+		return JSON.parse(contactList);
 	}
 	
 }

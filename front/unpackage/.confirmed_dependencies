@@ -12,7 +12,8 @@
 			"myself/myHome.html",
 			"html/myself/myHome.html",
 			"html/direction/discover.html",
-			"html/chatList/chatList.html"
+			"html/chatList/chatList.html",
+			"html/contact/contact.html"
 		]
 	},
 	"login.html": {

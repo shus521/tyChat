@@ -14,4 +14,20 @@
     where
         fr.accept_user_id = #{acceptUserId}
   </select>
+
+    <select id="queryMyFriends" resultType="com.tyss.pojo.vo.MyFriendsVO" parameterType="String">
+        select
+            u.id as friendUserId,
+            u.username as friendUsername,
+            u.face_image as friendFaceImage,
+            u.nickname as friendNickname
+        from
+            my_friends mf
+        inner join
+            users u
+        on
+            mf.my_friend_user_id = u.id
+        where
+            mf.my_user_id = #{userId}
+    </select>
 </mapper>

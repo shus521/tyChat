@@ -4,6 +4,7 @@ import com.tyss.enums.OperatorFriendRequestTypeEnum;
 import com.tyss.enums.SearchFriendsStatusEnum;
 import com.tyss.pojo.Users;
 import com.tyss.pojo.bo.UsersBO;
+import com.tyss.pojo.vo.MyFriendsVO;
 import com.tyss.pojo.vo.UsersVO;
 import com.tyss.service.UserService;
 import com.tyss.utils.FastDFSClient;
@@ -15,6 +16,8 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("u")
@@ -180,11 +183,23 @@ public class UserController {
             //同意好友请求，删除记录，且添加好友
             userService.passFriendRequest(sendUserId, acceptUserId);
         }
+        return IMoocJSONResult.ok();
+    }
 
+    /**
+     * 查询我的好友列表
+     * @param userId
+     * @return
+     * @throws Exception
+     */
+    @PostMapping("/myFriends")
+    public IMoocJSONResult myFriends(String userId) throws Exception {
+        if (StringUtils.isBlank(userId)) {
+            return IMoocJSONResult.errorMsg("");
+        }
 
+        List<MyFriendsVO> myFriends = userService.queryMyFriends(userId);
 
-        return IMoocJSONResult.errorMsg("");
-        //查询用户接收到的好友申请
-//        return IMoocJSONResult.ok(userService.queryFriendRequestList(userId));
+        return IMoocJSONResult.ok(myFriends);
     }
 }

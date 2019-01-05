@@ -9,11 +9,11 @@ import com.tyss.pojo.FriendsRequest;
 import com.tyss.pojo.MyFriends;
 import com.tyss.pojo.Users;
 import com.tyss.pojo.vo.FriendRequestVO;
+import com.tyss.pojo.vo.MyFriendsVO;
 import com.tyss.service.UserService;
 import com.tyss.utils.FastDFSClient;
 import com.tyss.utils.FileUtils;
 import com.tyss.utils.QRCodeUtils;
-import org.apache.catalina.User;
 import org.n3r.idworker.Sid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -208,5 +208,12 @@ public class UserServiceImpl implements UserService {
         myFriends.setMyUserId(sendUserId);
         myFriends.setMyFriendUserId(acceptUserId);
         myFriendsMapper.insert(myFriends);
+    }
+
+    @Transactional(propagation = Propagation.SUPPORTS)
+    @Override
+    public List<MyFriendsVO> queryMyFriends(String userId) {
+        List<MyFriendsVO> myFriends = usersMapperCustom.queryMyFriends(userId);
+        return myFriends;
     }
 }

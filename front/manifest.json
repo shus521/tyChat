@@ -139,7 +139,8 @@
 					"myHome.html",
 					"myself/myHome.html",
 					"html/myself/myHome.html",
-					"html/direction/discover.html"
+					"html/direction/discover.html",
+					"html/contact/contact.html"
 				],
 				"priority": 0
 			},
