@@ -143,8 +143,8 @@ public class UserController {
         return IMoocJSONResult.ok();
     }
 
-    @PostMapping("/queryFriendRequest")
-    public IMoocJSONResult queryFriendRequest(String userId) throws Exception {
+    @PostMapping("/queryFriendRequests")
+    public IMoocJSONResult queryFriendRequests(String userId) throws Exception {
         if (StringUtils.isBlank(userId)) {
             return IMoocJSONResult.errorMsg("");
         }

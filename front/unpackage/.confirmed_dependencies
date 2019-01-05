@@ -1,7 +1,8 @@
 {
 	"index.html": {
 		"resources": [
-			"chatList.html"
+			"chatList.html",
+			"html/chatList/chatList.html"
 		],
 		"refer": [
 			"contact.html",
@@ -10,7 +11,8 @@
 			"chatList.html",
 			"myself/myHome.html",
 			"html/myself/myHome.html",
-			"html/direction/discover.html"
+			"html/direction/discover.html",
+			"html/chatList/chatList.html"
 		]
 	},
 	"login.html": {

@@ -130,7 +130,8 @@
 		"pages": {
 			"index.html": {
 				"resources": [
-					"chatList.html"
+					"chatList.html",
+					"html/chatList/chatList.html"
 				],
 				"refer": [
 					"contact.html",
