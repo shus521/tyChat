@@ -30,7 +30,58 @@
 					console.log("333");
 					getFriendsRequests();
 				});
-			})
+				
+				CHAT.init();
+			});
+			
+			window.CHAT = {
+				socket: null,
+				init: function() {
+					if (window.WebSocket) {
+						//判断当前是否已连接，无需重复初始化
+						if (CHAT.socket != null && CHAT.socket != undefined && CHAT.socket.readyState == WebSocket.OPEN) {
+							return true;
+						}
+						
+						CHAT.socket = new WebSocket(app.wsUrl);
+						CHAT.socket.onopen = CHAT.wsopen,
+						CHAT.socket.onclose = CHAT.wsclose,
+						CHAT.socket.onerror = CHAT.wserror,
+						CHAT.socket.onmessage = CHAT.wsmsg;
+					} else {
+						alert("手机不支持");
+					}
+				},
+				chat: function(msg) {
+					//判断当前是否已连接，无需重复初始化
+					if (CHAT.socket != null && CHAT.socket != undefined && CHAT.socket.readyState == WebSocket.OPEN) {
+						CHAT.socket.send(msg);
+					} else {
+						CHAT.init();
+						setTimeout("reChat('" + msg + "')","1000");
+					}
+					
+				},
+				reChat: function(msg) {
+					console.log("重新发送消息");
+					CHAT.socket.send(msg);
+				},
+				wsopen: function() {
+					console.log("连接建立成功");
+				},
+				wsclose: function() {
+					console.log("连接关闭...");
+				},
+				wserror: function() {
+					console.log("发生错误...");
+				},
+				wsmsg: function(e) {
+					console.log("接受到消息：" + e.data);
+					var chattingWebview = plus.webview.getWebviewById("chatting-181219F6TY9DF23C.html");
+					chattingWebview.evalJS("receiveMsg('" + e.data + "')");
+				}
+			};
+			
 			
 			function getFriendsRequests() {
 				var user = app.getUserGlobalInfo();

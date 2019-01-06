@@ -1,10 +1,9 @@
 package com.tyss.service.impl;
 
+import com.tyss.enums.MsgSignFlagEnum;
 import com.tyss.enums.SearchFriendsStatusEnum;
-import com.tyss.mapper.FriendsRequestMapper;
-import com.tyss.mapper.MyFriendsMapper;
-import com.tyss.mapper.UsersMapper;
-import com.tyss.mapper.UsersMapperCustom;
+import com.tyss.mapper.*;
+import com.tyss.netty.ChatMsg;
 import com.tyss.pojo.FriendsRequest;
 import com.tyss.pojo.MyFriends;
 import com.tyss.pojo.Users;
@@ -40,6 +39,10 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private FriendsRequestMapper friendsRequestMapper;
+
+    @Autowired
+    private ChatMsgMapper chatMsgMapper;
+
     @Autowired
     private Sid sid;
     @Autowired
@@ -215,5 +218,26 @@ public class UserServiceImpl implements UserService {
     public List<MyFriendsVO> queryMyFriends(String userId) {
         List<MyFriendsVO> myFriends = usersMapperCustom.queryMyFriends(userId);
         return myFriends;
+    }
+
+    @Transactional(propagation = Propagation.REQUIRED)
+    @Override
+    public String saveMsg(ChatMsg chatMsg) {
+        com.tyss.pojo.ChatMsg msgDB = new com.tyss.pojo.ChatMsg();
+        String msgId = sid.nextShort();
+        msgDB.setId(msgId);
+        msgDB.setSendUserId(chatMsg.getSenderId());
+        msgDB.setAcceptUserId(chatMsg.getReceiveId());
+        msgDB.setCreateTime(new Date());
+        msgDB.setSignFlag(MsgSignFlagEnum.unsign.getType());
+        msgDB.setMsg(chatMsg.getMsg());
+        chatMsgMapper.insert(msgDB);
+        return msgId;
+    }
+
+    @Transactional(propagation = Propagation.REQUIRED)
+    @Override
+    public void updateMsgSigned(List<String> msgIdList) {
+        usersMapperCustom.batchUpdateMsgSigned(msgIdList);
     }
 }

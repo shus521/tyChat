@@ -1,10 +1,9 @@
 package com.tyss.service;
 
+import com.tyss.netty.ChatMsg;
 import com.tyss.pojo.Users;
 import com.tyss.pojo.vo.FriendRequestVO;
 import com.tyss.pojo.vo.MyFriendsVO;
-import org.apache.catalina.User;
-
 import java.util.List;
 
 public interface UserService {
@@ -85,4 +84,17 @@ public interface UserService {
      * @return
      */
     public List<MyFriendsVO> queryMyFriends(String userId);
+
+    /**
+     * 保存聊天记录到数据库
+     * @param chatMsg
+     * @return
+     */
+    public String saveMsg(ChatMsg chatMsg);
+
+    /**
+     * 批量签收消息
+     * @param msgIdList
+     */
+    public void updateMsgSigned(List<String> msgIdList);
 }

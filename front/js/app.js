@@ -2,6 +2,7 @@ window.app = {
 //	serverUrl : 'http://192.168.43.200:8080',
 	serverUrl : 'http://192.168.1.104:8080',
 	fileUrl : 'http://47.93.36.58:88/ty/',
+	wsUrl : 'ws://192.168.1.104:8088/ws',
 	/**
 	 * 判断字符串是否为空
 	 * @param {Object} str

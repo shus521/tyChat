@@ -1,3 +1,5 @@
 back/target/*
 back/.idea/*
 back/src/main/resources/application.properties
+front/unpackage/.confirmed_dependencies
+front/manifest.json

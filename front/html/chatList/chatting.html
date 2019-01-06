@@ -201,7 +201,10 @@
 		<script type="application/javascript" src="../../js/app.js"></script>
 		<script type="text/javascript">
 			//创建命名空间，外部无法访问
-			(function($, doc) {
+//			(function($, doc) {
+				var friendUserId;
+				var friendNickname;
+				var friendFaceImage;
 				mui.plusReady(function(){
 					//获取自己信息
 					var me = app.getUserGlobalInfo();
@@ -210,17 +213,17 @@
 						softinputMode:"adjustResize"
 					});
 					
-					var friendUserId = chattingWebview.friendUserId;
-					var friendNickname = chattingWebview.friendNickname;
-					var friendFaceImage = chattingWebview.friendFaceImage;
+					friendUserId = chattingWebview.friendUserId;
+					friendNickname = chattingWebview.friendNickname;
+					friendFaceImage = chattingWebview.friendFaceImage;
 					
 					//修改标题为朋友昵称
-					doc.getElementById("chatting-nickname").innerHTML = friendNickname;
+					document.getElementById("chatting-nickname").innerHTML = friendNickname;
 					
 					resizeScreen();
 					
-					var msg_text = doc.getElementById("msg-text");
-					var send = doc.getElementById("send");
+					var msg_text = document.getElementById("msg-text");
+					var send = document.getElementById("send");
 					
 					msg_text.addEventListener("input", function() {
 						var msg_text_val = msg_text.value;
@@ -233,35 +236,39 @@
 					
 					window.addEventListener("resize", function() {
 						resizeScreen();
-						doc.getElementById("msg-outter").style.paddingBottom = "50px";
+						document.getElementById("msg-outter").style.paddingBottom = "50px";
 					});
 					
 					//发送消息判断网络
 					send.addEventListener("tap", function() {
 						var networkType = plus.networkinfo.getCurrentType();
+						var msg = msg_text.value;
 						
 						if(networkType == 0 || networkType == 1) {
 							app.showTip("网络未连接","error");
 							return false;
 						}
 						
-						if(msg_text.value.length < 1) {
+						if(msg.length < 1) {
 							app.showTip("请输入内容","error");
 							return false;
 						}
 						
 						//渲染消息
-						sendMsg(me.faceImage, msg_text.value);
+						sendMsg(me.faceImage, msg);
 						//清空文本框
 						msg_text.value = "";
 						send.setAttribute("class", "mui-btn-gray");
 						
+						//发送消息到后端
+						var wsWebview = plus.webview.getWebviewById("chatList.html");
+						wsWebview.evalJS("CHAT.chat('"+ msg +"')");			
 					});
 				});
 				
 				//设置聊天窗口
 				function resizeScreen() {
-					var areaMsgList = doc.getElementById("msg");
+					var areaMsgList = document.getElementById("msg");
 					areaMsgList.scrollTop = areaMsgList.scrollHeight + areaMsgList.offsetHeight;
 				}
 				
@@ -276,7 +283,20 @@
 					var msgList = document.getElementById("msg");
 					msgList.insertAdjacentHTML("beforeend", msgHtml);
 				}
-			}(mui, document));
+				
+				//接收消息
+				function receiveMsg(msg) {
+					var msgHtml = '<div class="friend_lists">' +
+								  '<div class="header_img">' + 
+								  '<img src="'+ app.fileUrl + friendFaceImage +'" width="40px" height="40px" />' + 
+								  '</div>' + 
+								  '<div class="msg-wrapper right">' +
+								  '<p class="msg-left-white">'+ msg +'</p>' +
+								  '</div></div>';
+					var msgList = document.getElementById("msg");
+					msgList.insertAdjacentHTML("beforeend", msgHtml);
+				}
+//			}(mui, document));
 		</script>
 	</body>
 
