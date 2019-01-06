@@ -191,6 +191,13 @@
 					"html/direction/seach.html"
 				],
 				"priority": 0
+			},
+			"html/contact/contact.html": {
+				"resources": [],
+				"refer": [
+					"html/chatList/chatting.html"
+				],
+				"priority": 0
 			}
 		},
 		"idle": {

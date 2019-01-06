@@ -51,5 +51,10 @@
 		"refer": [
 			"html/direction/seach.html"
 		]
+	},
+	"html/contact/contact.html": {
+		"refer": [
+			"html/chatList/chatting.html"
+		]
 	}
 }

@@ -18,7 +18,7 @@
 </head>
 <body>
 	<header class="mui-bar mui-bar-nav title">
-	    <h1 class="mui-title title-color"><b>园聊<b></h1>
+	    <h1 class="mui-title title-color"><b id="b_header">园聊<b></h1>
 	</header>
 	<nav class="mui-bar mui-bar-tab">
 	    <a class="mui-tab-item mui-active" tabIndex = "0">
@@ -73,6 +73,9 @@
 				return false;
 			}
 			
+			//检测网络连接
+			netChangeSwitch();
+			
 			var indexWebview = plus.webview.currentWebview();
 			
 			for (var i = 0;i < tyArray.length; i++) {
@@ -95,6 +98,19 @@
 			});
 			
 		});
+		
+		//检测网络连接
+		function netChangeSwitch() {
+			document.addEventListener("netchange", function() {
+				var networkType = plus.networkinfo.getCurrentType();
+				var b_header = document.getElementById("b_header");
+				if(networkType != 0 && networkType != 1) {
+					b_header.innerHTML = "园信";
+				} else {
+					b_header.innerHTML = "园信(未连接网络...)";
+				}
+			});
+		}
 	</script>
 </body>
 </html>
