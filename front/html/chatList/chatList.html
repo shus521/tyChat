@@ -88,6 +88,8 @@
 					timeout:10000,//超时时间设置为10秒；
 					headers:{'Content-Type':'application/json'},	              
 					success:function(data){
+						var myFriends = data.data;
+						app.setContactList(myFriends);
 						//刷新好友请求记录
 						getFriendsRequests();
 					}

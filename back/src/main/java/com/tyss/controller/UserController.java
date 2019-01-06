@@ -183,7 +183,9 @@ public class UserController {
             //同意好友请求，删除记录，且添加好友
             userService.passFriendRequest(sendUserId, acceptUserId);
         }
-        return IMoocJSONResult.ok();
+
+        List<MyFriendsVO> myFriends = userService.queryMyFriends(acceptUserId);
+        return IMoocJSONResult.ok(myFriends);
     }
 
     /**

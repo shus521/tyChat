@@ -127,11 +127,9 @@
 			function renderContactPage() {
 				// 1. 获取联系人列表
 				var friendList = app.getContactList();
-				console.log(friendList.length);
 				// 2. 循环好友列表，转换为拼音
 				for (var i = 0 ; i < friendList.length ; i ++) {
 					var friend = friendList[i];
-					console.log(friend.friendNickname);
 					// 2.1 转换拼音
 					var pingyin = words.convertPinyin(friend.friendNickname);
 					// 2.2 截取拼音的首字母
