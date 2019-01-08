@@ -53,12 +53,13 @@
 					}
 				},
 				chat: function(msg) {
+					console.log(msg);
 					//判断当前是否已连接，无需重复初始化
 					if (CHAT.socket != null && CHAT.socket != undefined && CHAT.socket.readyState == WebSocket.OPEN) {
 						CHAT.socket.send(msg);
 					} else {
 						CHAT.init();
-						setTimeout("reChat('" + msg + "')","1000");
+						setTimeout("CHAT.reChat('" + msg + "')","2000");
 					}
 					
 				},
@@ -68,11 +69,17 @@
 				},
 				wsopen: function() {
 					console.log("连接建立成功");
+					
+					var me = app.getUserGlobalInfo();
+					var chatMsg = new app.ChatMsg(me.id, null, null, null);
+					var dataContent = new app.DataContent(app.CONNECT, chatMsg, null);
+					CHAT.chat(JSON.stringify(dataContent));
 				},
 				wsclose: function() {
 					console.log("连接关闭...");
 				},
-				wserror: function() {
+				wserror: function(e) {
+					console.log(e);
 					console.log("发生错误...");
 				},
 				wsmsg: function(e) {

@@ -8,7 +8,7 @@ public class ChatMsg implements Serializable {
     private String msg;
     private String msgId;
     private String senderId;
-    private String receiveId;
+    private String receiverId;
 
     public String getMsg() {
         return msg;
@@ -34,11 +34,11 @@ public class ChatMsg implements Serializable {
         this.senderId = senderId;
     }
 
-    public String getReceiveId() {
-        return receiveId;
+    public String getReceiverId() {
+        return receiverId;
     }
 
-    public void setReceiveId(String receiveId) {
-        this.receiveId = receiveId;
+    public void setReceiverId(String receiverId) {
+        this.receiverId = receiverId;
     }
 }

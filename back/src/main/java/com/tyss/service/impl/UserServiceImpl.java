@@ -227,7 +227,7 @@ public class UserServiceImpl implements UserService {
         String msgId = sid.nextShort();
         msgDB.setId(msgId);
         msgDB.setSendUserId(chatMsg.getSenderId());
-        msgDB.setAcceptUserId(chatMsg.getReceiveId());
+        msgDB.setAcceptUserId(chatMsg.getReceiverId());
         msgDB.setCreateTime(new Date());
         msgDB.setSignFlag(MsgSignFlagEnum.unsign.getType());
         msgDB.setMsg(chatMsg.getMsg());

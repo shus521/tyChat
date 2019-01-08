@@ -1,10 +1,7 @@
 package com.tyss.netty;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-
-import com.tyss.SpringUtil;
 import com.tyss.enums.MsgActionEnum;
 import com.tyss.service.UserService;
 import com.tyss.utils.JsonUtils;
@@ -16,6 +13,7 @@ import io.netty.channel.group.DefaultChannelGroup;
 import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
 import io.netty.util.concurrent.GlobalEventExecutor;
 import org.apache.commons.lang3.StringUtils;
+import com.tyss.SpringUtil;
 
 /**
  * 
@@ -27,7 +25,7 @@ public class ChatHandler extends SimpleChannelInboundHandler<TextWebSocketFrame>
 	// 用于记录和管理所有客户端的channle
 	private static ChannelGroup users =
 			new DefaultChannelGroup(GlobalEventExecutor.INSTANCE);
-	
+
 	@Override
 	protected void channelRead0(ChannelHandlerContext ctx, TextWebSocketFrame msg) 
 			throws Exception {
@@ -46,10 +44,10 @@ public class ChatHandler extends SimpleChannelInboundHandler<TextWebSocketFrame>
 			//2.消息:保存内容到数据库,标记消息的签收状态
 			ChatMsg chatMsg = dataContent.getChatMsg();
 			String msgText = chatMsg.getMsg();
-			String receiverId = chatMsg.getReceiveId();
+			String receiverId = chatMsg.getReceiverId();
 			String senderId = chatMsg.getSenderId();
-			UserService userService = (UserService)SpringUtil.getBean("userServiceImpl");
-			String msgId = userService.saveMsg(chatMsg);
+			UserService userService = (UserService) SpringUtil.getBean("userServiceImpl");
+            String msgId = userService.saveMsg(chatMsg);
 			chatMsg.setMsgId(msgId);
 
 			//发送消息
@@ -69,7 +67,7 @@ public class ChatHandler extends SimpleChannelInboundHandler<TextWebSocketFrame>
 			//3签收消息
 			UserService userService = (UserService)SpringUtil.getBean("userServiceImpl");
 			//需要签收的消息id
-			String msgIdStr = dataContent.getExtend();
+			String msgIdStr = dataContent.getExtand();
 			String msgIds[] = msgIdStr.split(",");
 			List<String> msgIdList = new ArrayList<>();
 			for (String mid:msgIds) {

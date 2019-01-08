@@ -1,8 +1,9 @@
 window.app = {
-//	serverUrl : 'http://192.168.43.200:8080',
-	serverUrl : 'http://192.168.1.104:8080',
+	serverUrl : 'http://192.168.43.200:8080',
+//	serverUrl : 'http://192.168.1.104:8080',
 	fileUrl : 'http://47.93.36.58:88/ty/',
-	wsUrl : 'ws://192.168.1.104:8088/ws',
+//	wsUrl : 'ws://192.168.1.104:8088/ws',
+	wsUrl : 'ws://192.168.43.200:8088/ws',
 	/**
 	 * 判断字符串是否为空
 	 * @param {Object} str
@@ -63,6 +64,35 @@ window.app = {
 		}
 //		console.log("454545" + JSON.stringify(JSON.parse(contactList)));
 		return JSON.parse(contactList);
-	}
+	},
+	CONNECT:   1, //"第一次(或重连)初始化连接"),
+	CHAT:      2, //"聊天消息"),	
+	SIGNED:    3, //"消息签收"),
+	KEEPALIVE: 4, //"客户端保持心跳"),
+	/**
+	 * 和后端的 ChatMsg 聊天模型对象保持一致
+	 * @param {Object} senderId
+	 * @param {Object} receiverId
+	 * @param {Object} msg
+	 * @param {Object} msgId
+	 */
+	ChatMsg: function(senderId, receiverId, msg, msgId){
+		this.senderId = senderId;
+		this.receiverId = receiverId;
+		this.msg = msg;
+		this.msgId = msgId;
+	},
+	
+	/**
+	 * 构建消息 DataContent 模型对象
+	 * @param {Object} action
+	 * @param {Object} chatMsg
+	 * @param {Object} extand
+	 */
+	DataContent: function(action, chatMsg, extand){
+		this.action = action;
+		this.chatMsg = chatMsg;
+		this.extand = extand;
+	},
 	
 }
