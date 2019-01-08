@@ -62,6 +62,7 @@
 					friendNickname = chattingWebview.friendNickname;
 					friendFaceImage = chattingWebview.friendFaceImage;
 					
+					initChatHistory();
 					//修改标题为朋友昵称
 					document.getElementById("chatting-nickname").innerHTML = friendNickname;
 					
@@ -109,7 +110,11 @@
 						var chatMsg = new app.ChatMsg(me.id, friendUserId, msg, null);
 						var dataContent = new app.DataContent(app.CHAT, chatMsg, null);
 						var wsWebview = plus.webview.getWebviewById("chatList.html");
-						wsWebview.evalJS("CHAT.chat('"+ JSON.stringify(dataContent) +"')");			
+						wsWebview.evalJS("CHAT.chat('"+ JSON.stringify(dataContent) +"')");		
+						
+						//保存我发送的消息到本地缓存
+						console.log(me.id + "-" + friendUserId);
+						app.saveUserChatHistory(me.id, friendUserId, msg, 1);
 					});
 				});
 				
@@ -144,6 +149,40 @@
 					msgList.insertAdjacentHTML("beforeend", msgHtml);
 				}
 //			}(mui, document));
+			
+			//初始化用户聊天记录
+			function initChatHistory() {
+				var msg_list = document.getElementById("msg");
+				var me = app.getUserGlobalInfo();
+				var myId = me.id;
+				var myNickname = me.nickname;
+				var myFaceImg = me.faceImage;
+				
+				var chatHistoryList = app.getUserChatHistory(myId, friendUserId);
+				console.log(myId);
+				console.log(friendUserId);
+				var chatHistoryHtml = "";
+				for (var i = 0; i< chatHistoryList.length; i++) {
+					var singleMsg = chatHistoryList[i];
+					if (singleMsg.flag == 1) {
+						chatHistoryHtml += '<div class="me_lists"><div class="header_img">' +
+							'<img src="'+ app.fileUrl + myFaceImg +'" width="40px" height="40px" />' + 
+							'</div>' +
+							'<div class="msg-wrapper left">' +
+							'<p class="msg-right-green">'+ singleMsg.msg +'</p>' +
+							'</div></div>';
+					} else {
+						chatHistoryHtml += '<div class="friend_lists">' +
+								  '<div class="header_img">' + 
+								  '<img src="'+ app.fileUrl + friendFaceImage +'" width="40px" height="40px" />' + 
+								  '</div>' + 
+								  '<div class="msg-wrapper right">' +
+								  '<p class="msg-left-white">'+ singleMsg.msg +'</p>' +
+								  '</div></div>';
+					}
+				}
+				msg_list.innerHTML = chatHistoryHtml;
+			}
 		</script>
 	</body>
 

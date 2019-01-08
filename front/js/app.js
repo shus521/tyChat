@@ -94,5 +94,53 @@ window.app = {
 		this.chatMsg = chatMsg;
 		this.extand = extand;
 	},
+	/**
+	 * 保存用户的聊天记录
+	 * @param {Object} myId
+	 * @param {Object} friendId
+	 * @param {Object} msg
+	 * @param {Object} flag  判断本条消息是谁发送的 1我 2朋友
+	 */
+	saveUserChatHistory: function(myId, friendId, msg, flag) {
+		var me = this;
+		var chatKey = "chat-" + myId + "-" + friendId;
+		//从本地缓存获取聊天记录
+		var chatHistoryListStr = plus.storage.getItem(chatKey);
+		var chatHistoryList;
+		if(me.isNotNull(chatHistoryListStr)) {
+			chatHistoryList = JSON.parse(chatHistoryListStr);
+		} else {
+			chatHistoryList = [];
+		}
+		
+		var singleMsg = new me.ChatHistory(myId, friendId, msg, flag);
+		chatHistoryList.push(singleMsg);
+		plus.storage.setItem(chatKey, JSON.stringify(chatHistoryList));
+	},
+	ChatHistory: function(myId, friendId, msg, flag) {
+		this.myId = myId;
+		this.friendId = friendId;
+		this.msg = msg;
+		this.flag = flag;
+	},
+	/**
+	 * 获取用户聊天记录
+	 * @param {Object} myId
+	 * @param {Object} friendId
+	 */
+	getUserChatHistory: function(myId, friendId) {
+		var me = this;
+		var chatKey = "chat-" + myId + "-" + friendId;
+		var chatHistoryListStr = plus.storage.getItem(chatKey);
+		var chatHistoryList;
+		if(me.isNotNull(chatHistoryListStr)) {
+			chatHistoryList = JSON.parse(chatHistoryListStr);
+		} else {
+			chatHistoryList = [];
+		}
+		
+		return chatHistoryList;
+		
+	}
 	
 }

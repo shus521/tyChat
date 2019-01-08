@@ -84,8 +84,23 @@
 				},
 				wsmsg: function(e) {
 					console.log("接受到消息：" + e.data);
-					var chattingWebview = plus.webview.getWebviewById("chatting-181219F6TY9DF23C.html");
-					chattingWebview.evalJS("receiveMsg('" + e.data + "')");
+					var chatMsg = JSON.parse(e.data);
+					var msg = chatMsg.msg;
+					//应为发送者，目前测试，故使用自己
+					var friendUserId = chatMsg.receiverId;
+					
+					var chattingWebview = plus.webview.getWebviewById("chatting-" + friendUserId +".html");
+					if (chattingWebview != null) {
+						chattingWebview.evalJS("receiveMsg('" + msg + "')");
+					}
+					
+					//签收消息
+					var dataContentSign = new app.DataContent(app.SIGNED, null, chatMsg.msgId);
+					CHAT.chat(JSON.stringify(dataContentSign));
+					
+					//保存接收到的消息到本地缓存
+					app.saveUserChatHistory(chatMsg.receiverId, chatMsg.senderId, msg, 2);
+					
 				}
 			};
 			
