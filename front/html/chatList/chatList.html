@@ -6,6 +6,22 @@
 		<title></title>
 		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
 		<link href="../../css/mui.css" rel="stylesheet" />
+		<style>
+			.red-point{
+	          position: relative;
+	        }
+	
+	        .red-point::before{
+	          content: " ";
+	          border: 5px solid #C9394A;/*设置红色*/
+	          border-radius:5px;/*设置圆角*/
+	          position: absolute;
+	          z-index: 3000;
+	          right: 0%;
+	          margin-right: -10px;
+	          margin-top: 0px;
+	        }
+		</style>
 	</head>
 
 	<body>
@@ -13,6 +29,9 @@
 		<div class="mui-content">
 		    <ul class="mui-table-view" id="ul_friend_request_list" style="margin-bottom: 10px;">
 				
+			</ul>
+			
+			<ul id="ul_chatSnapshot" class="mui-table-view">
 			</ul>
 		</div>
 		
@@ -32,6 +51,26 @@
 				});
 				
 				CHAT.init();
+				
+				
+				// 为好友通讯录批量绑定点击事件
+				mui("#ul_chatSnapshot").on("tap", ".chat-with-friend", function(e){
+					var friendUserId = this.getAttribute("friendUserId");
+					var friendNickname = this.getAttribute("friendNickname");
+					var friendFaceImage = this.getAttribute("friendFaceImage");
+					
+					// 打开聊天子页面
+					mui.openWindow({
+						url: "../chatList/chatting.html",
+						id: "chatting-" + friendUserId + '.html',	// 每个朋友的聊天页面都是唯一对应的
+						extras: {
+							friendUserId: friendUserId,
+							friendNickname: friendNickname,
+							friendFaceImage: friendFaceImage
+						}
+					});
+					
+				})
 			});
 			
 			window.CHAT = {
@@ -62,6 +101,9 @@
 						setTimeout("CHAT.reChat('" + msg + "')","2000");
 					}
 					
+					//渲染快照列表
+					loadingChatSnapshot();
+					
 				},
 				reChat: function(msg) {
 					console.log("重新发送消息");
@@ -86,12 +128,15 @@
 					console.log("接受到消息：" + e.data);
 					var chatMsg = JSON.parse(e.data);
 					var msg = chatMsg.msg;
-					//应为发送者，目前测试，故使用自己
-					var friendUserId = chatMsg.receiverId;
+					var friendUserId = chatMsg.senderId;
 					
 					var chattingWebview = plus.webview.getWebviewById("chatting-" + friendUserId +".html");
+					//设置消息默认状态为已读
+					var isRead = true;
 					if (chattingWebview != null) {
 						chattingWebview.evalJS("receiveMsg('" + msg + "')");
+					} else {
+						isRead = false;  //聊天页面没有打开，未读消息
 					}
 					
 					//签收消息
@@ -100,6 +145,10 @@
 					
 					//保存接收到的消息到本地缓存
 					app.saveUserChatHistory(chatMsg.receiverId, chatMsg.senderId, msg, 2);
+					//保存接收到的消息到快照
+					app.saveUserSnapshot(chatMsg.receiverId, chatMsg.senderId, msg, isRead);
+					//渲染快照列表
+					loadingChatSnapshot();
 					
 				}
 			};
@@ -188,6 +237,42 @@
 						'</li>';
 				
 				return html;
+			}
+			
+			//渲染聊天快照
+			function loadingChatSnapshot() {
+				var user = app.getUserGlobalInfo();
+				var chatSnapshotList = app.getUserChatSnapshot(user.id);
+				
+				var chatSnapShotHtml = "";
+				var ul_chatSnapshot = document.getElementById("ul_chatSnapshot");
+				ul_chatSnapshot.innerHTML = "";
+				for (var i = 0;i < chatSnapshotList.length; i++) {
+					var chatItem = chatSnapshotList[i];
+					var friendId = chatItem.friendId;
+					//根据friendId从本地联系人缓存种获取响应信息
+					var friend = app.getFriendFromContactList(friendId);
+					
+					var isRead = chatItem.isRead;
+					var readHtmlBefore = '';
+					var readHtmlAfter = '';
+					if (isRead == false) {
+						readHtmlBefore = '<span class="red-point">';
+						readHtmlAfter = '</span>';
+					}
+					if (friend != null) {
+//						console.log("222");
+						chatSnapShotHtml = '<li friendUserId="' + friend.friendUserId + '" friendNickname="' + friend.friendNickname + '" friendFaceImage="' + friend.friendFaceImage + '"  class="chat-with-friend mui-table-view-cell mui-media">' +
+										'<div class="mui-media-body ">' +
+								            '<img class="mui-media-object mui-pull-left" src="' + app.fileUrl + friend.friendFaceImage + '"/>' +
+								            readHtmlBefore + friend.friendNickname + readHtmlAfter + 
+								            '<p class="mui-ellipsis">' + chatItem.msg + '</p>' +
+							            '</div>' +
+								    '</li>';
+						ul_chatSnapshot.insertAdjacentHTML("beforeend", chatSnapShotHtml);
+					}
+					
+				}
 			}
 		</script>
 	</body>

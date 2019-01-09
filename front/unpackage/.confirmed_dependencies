@@ -56,5 +56,10 @@
 		"refer": [
 			"html/chatList/chatting.html"
 		]
+	},
+	"html/chatList/chatList.html": {
+		"refer": [
+			"html/chatList/chatting.html"
+		]
 	}
 }

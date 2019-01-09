@@ -141,6 +141,85 @@ window.app = {
 		
 		return chatHistoryList;
 		
+	},
+	/**
+	 * 聊天记录的快照，保存和好友聊天的最后一条消息
+	 * @param {Object} myId
+	 * @param {Object} friendId
+	 * @param {Object} msg
+	 * @param {Object} isRead
+	 */
+	saveUserSnapshot: function(myId, friendId, msg, isRead) {
+		var me = this;
+		var chatKey = "chat-snapshot" + myId;
+		//从本地缓存获取聊天快照
+		var chatSnapshotListStr = plus.storage.getItem(chatKey);
+		var chatSnapshotList;
+		if(me.isNotNull(chatSnapshotListStr)) {
+			chatSnapshotList = JSON.parse(chatSnapshotListStr);
+			//循环快照判断是否能匹配到friendId,能匹配则删除
+			for(var i = 0; i < chatSnapshotList.length; i++) {
+				if (chatSnapshotList[i].friendId == friendId) {
+					chatSnapshotList.splice(i, 1);
+					break;
+				}
+			}
+		} else {
+			chatSnapshotList = [];
+		}
+		
+		var singleMsg = new me.ChatSnapshot(myId, friendId, msg, isRead);
+		chatSnapshotList.unshift(singleMsg);
+		plus.storage.setItem(chatKey, JSON.stringify(chatSnapshotList));
+	},
+	/**
+	 * 快照对象
+	 * @param {Object} myId
+	 * @param {Object} friendId
+	 * @param {Object} msg
+	 * @param {Object} isRead
+	 */
+	ChatSnapshot: function(myId, friendId, msg, isRead) {
+		this.myId = myId;
+		this.friendId = friendId;
+		this.msg = msg;
+		this.isRead = isRead;
+	},
+	/**
+	 * 获取聊天快照
+	 * @param {Object} myId
+	 */
+	getUserChatSnapshot: function(myId) {
+		var me = this;
+		var chatKey = "chat-snapshot" + myId;
+		var chatSnapshotListStr = plus.storage.getItem(chatKey);
+		var chatSnapshotList;
+		if(me.isNotNull(chatSnapshotListStr)) {
+			chatSnapshotList = JSON.parse(chatSnapshotListStr);
+		} else {
+			chatSnapshotList = [];
+		}
+		
+		return chatSnapshotList;
+	},
+	/**
+	 * 从本地联系人缓存获取好友信息
+	 * @param {Object} friendId
+	 */
+	getFriendFromContactList: function(friendId) {
+		var contactListStr = plus.storage.getItem("contactList");
+		if (!this.isNotNull(contactListStr)) {
+//			console.log("33333333");
+			return null;
+		}
+		var contactList = JSON.parse(contactListStr);
+		for (var i = 0;i< contactList.length;i++) {
+			var friend = contactList[i];
+			if (friend.friendUserId == friendId) {
+				return friend;
+				break;
+			}
+		}
 	}
 	
 }

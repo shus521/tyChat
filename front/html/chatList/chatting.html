@@ -115,6 +115,9 @@
 						//保存我发送的消息到本地缓存
 						console.log(me.id + "-" + friendUserId);
 						app.saveUserChatHistory(me.id, friendUserId, msg, 1);
+						
+						//保存快照记录
+						app.saveUserSnapshot(me.id, friendUserId, msg, true);
 					});
 				});
 				
