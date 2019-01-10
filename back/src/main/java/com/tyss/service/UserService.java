@@ -97,4 +97,12 @@ public interface UserService {
      * @param msgIdList
      */
     public void updateMsgSigned(List<String> msgIdList);
+
+
+    /**
+     * 获取未签收消息列表
+     * @param acceptUserId
+     * @return
+     */
+    public List<com.tyss.pojo.ChatMsg> getUnreadMsgList(String acceptUserId);
 }

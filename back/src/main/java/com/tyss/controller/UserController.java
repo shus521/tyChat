@@ -2,6 +2,7 @@ package com.tyss.controller;
 
 import com.tyss.enums.OperatorFriendRequestTypeEnum;
 import com.tyss.enums.SearchFriendsStatusEnum;
+import com.tyss.pojo.ChatMsg;
 import com.tyss.pojo.Users;
 import com.tyss.pojo.bo.UsersBO;
 import com.tyss.pojo.vo.MyFriendsVO;
@@ -63,7 +64,7 @@ public class UserController {
     public IMoocJSONResult uploadFaceBase64(@RequestBody UsersBO usersBO) throws Exception {
         /* 获取前端上传的base64字符串，转换为文件对象 */
         String base64Data = usersBO.getFaceData();
-        String userFacePath = "E:\\" + usersBO.getUserId() + "userface64.png";
+        String userFacePath = "./tyChat/pic" + usersBO.getUserId() + "userface64.png";
         FileUtils.base64ToFile(userFacePath, base64Data);
 
         //上传文件到fastDFS
@@ -203,5 +204,20 @@ public class UserController {
         List<MyFriendsVO> myFriends = userService.queryMyFriends(userId);
 
         return IMoocJSONResult.ok(myFriends);
+    }
+
+    /**
+     * 用户手机端获取未签收的消息列表
+     * @param acceptUserId
+     * @return
+     * @throws Exception
+     */
+    @PostMapping("/getUnreadMsgList")
+    public IMoocJSONResult getUnreadMsgList(String acceptUserId) throws Exception {
+        if (StringUtils.isBlank(acceptUserId)) {
+            return IMoocJSONResult.errorMsg("");
+        }
+        List<ChatMsg> unreadMsgList = userService.getUnreadMsgList(acceptUserId);
+        return IMoocJSONResult.ok(unreadMsgList);
     }
 }

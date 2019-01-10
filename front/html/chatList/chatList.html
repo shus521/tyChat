@@ -70,6 +70,11 @@
 						}
 					});
 					
+					//标记未读状态为已读
+					app.readUserChatSnapshot(user.id, friendUserId);
+					//渲染快照列表
+					loadingChatSnapshot();
+					
 				})
 			});
 			
@@ -116,6 +121,9 @@
 					var chatMsg = new app.ChatMsg(me.id, null, null, null);
 					var dataContent = new app.DataContent(app.CONNECT, chatMsg, null);
 					CHAT.chat(JSON.stringify(dataContent));
+					
+					//每次重新链接后获取未签收列表
+					fetchUnreadMsgList();
 				},
 				wsclose: function() {
 					console.log("连接关闭...");
@@ -150,6 +158,15 @@
 					//渲染快照列表
 					loadingChatSnapshot();
 					
+				},
+				/**
+				 * 批量签收
+				 * @param {Object} unsignedMsgId
+				 */
+				signMsgList: function(unsignedMsgId) {
+					//构建批量签收对象模型
+					var dataMsgContent = new app.DataContent(app.SIGNED, null, unsignedMsgId);
+					CHAT.chat(JSON.stringify(dataMsgContent));
 				}
 			};
 			
@@ -263,7 +280,10 @@
 					if (friend != null) {
 //						console.log("222");
 						chatSnapShotHtml = '<li friendUserId="' + friend.friendUserId + '" friendNickname="' + friend.friendNickname + '" friendFaceImage="' + friend.friendFaceImage + '"  class="chat-with-friend mui-table-view-cell mui-media">' +
-										'<div class="mui-media-body ">' +
+										'<div class="mui-slider-right mui-disabled">' +
+											'<a id="link_delChatRecord" friendUserId="' + friendId + '" class="mui-btn mui-btn-red">删除</a>' +
+										'</div>' +
+										'<div class="mui-slider-handle mui-media-body ">' +
 								            '<img class="mui-media-object mui-pull-left" src="' + app.fileUrl + friend.friendFaceImage + '"/>' +
 								            readHtmlBefore + friend.friendNickname + readHtmlAfter + 
 								            '<p class="mui-ellipsis">' + chatItem.msg + '</p>' +
@@ -274,6 +294,46 @@
 					
 				}
 			}
+			
+			/**
+			 * 每次重连后获取服务器的未签收消息
+			 */
+			function fetchUnreadMsgList() {
+				var user = app.getUserGlobalInfo();
+				var msgIds = ","; //格式,1001,1002,1003,
+				mui.ajax(app.serverUrl + "/u/getUnreadMsgList?acceptUserId=" + user.id,{
+					data:{},
+					dataType:'json',//服务器返回json格式数据
+					type:'post',//HTTP请求类型
+					timeout:10000,//超时时间设置为10秒；
+					headers:{'Content-Type':'application/json'},	              
+					success:function(data){
+						var unreadList = data.data;
+						console.log(JSON.stringify(unreadList));
+						
+						//保存聊天记录
+						//保存聊天快照
+						//批量签收
+						for (var i=0;i < unreadList.length;i++) {
+							var msgObj = unreadList[i];
+							//保存聊天记录
+							app.saveUserChatHistory(msgObj.acceptUserId, msgObj.sendUserId, msgObj.msg, 2);
+							//保存聊天快照
+							app.saveUserSnapshot(msgObj.acceptUserId, msgObj.sendUserId, msgObj.msg, false);
+							//拼接批量签收的消息id
+							msgIds += msgObj.id;
+							msgIds += ",";
+						}
+						
+						//批量签收
+						CHAT.signMsgList(msgIds);
+						//刷新快照
+						loadingChatSnapshot();
+					}
+				});
+			}
+		
+		
 		</script>
 	</body>
 

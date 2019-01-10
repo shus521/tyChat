@@ -203,6 +203,31 @@ window.app = {
 		return chatSnapshotList;
 	},
 	/**
+	 * 标记未读消息为已读
+	 * @param {Object} myId
+	 * @param {Object} friendId
+	 */
+	readUserChatSnapshot: function(myId, friendId) {
+		var me = this;
+		var chatKey = "chat-snapshot" + myId;
+		var chatSnapshotListStr = plus.storage.getItem(chatKey);
+		var chatSnapshotList;
+		if(me.isNotNull(chatSnapshotListStr)) {
+			chatSnapshotList = JSON.parse(chatSnapshotListStr);
+			for (var i = 0;i<chatSnapshotList.length;i++) {
+				var item = chatSnapshotList[i];
+				if (item.friendId == friendId) {
+					item.isRead = true; //标记为已读
+					chatSnapshotList.splice(i, 1, item); //替换原有的快照
+					break;
+				}
+			}
+			plus.storage.setItem(chatKey, JSON.stringify(chatSnapshotList));
+		} else {
+			return;
+		}
+	},
+	/**
 	 * 从本地联系人缓存获取好友信息
 	 * @param {Object} friendId
 	 */

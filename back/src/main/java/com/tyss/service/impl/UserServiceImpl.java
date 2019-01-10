@@ -240,4 +240,18 @@ public class UserServiceImpl implements UserService {
     public void updateMsgSigned(List<String> msgIdList) {
         usersMapperCustom.batchUpdateMsgSigned(msgIdList);
     }
+
+    @Transactional(propagation = Propagation.SUPPORTS)
+    @Override
+    public List<com.tyss.pojo.ChatMsg> getUnreadMsgList(String acceptUserId) {
+        Example chatExample = new Example(com.tyss.pojo.ChatMsg.class);
+        Example.Criteria chatCriteria = chatExample.createCriteria();
+        chatCriteria.andEqualTo("signFlag", 0);
+        chatCriteria.andEqualTo("acceptUserId", acceptUserId);
+
+        List<com.tyss.pojo.ChatMsg> result = chatMsgMapper.selectByExample(chatExample);
+
+
+        return result;
+    }
 }
