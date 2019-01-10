@@ -181,3 +181,10 @@ footer {
 	overflow: auto;
 	-webkit-overflow-scrolling: touch;
 }
+
+.word_style {
+	word-wrap: break-word;
+	word-break: break-all;
+	white-space: normal;
+	text-align:left;
+}

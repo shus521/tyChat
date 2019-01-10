@@ -129,11 +129,12 @@
 				
 				//发送消息
 				function sendMsg(faceImg, msg) {
+					
 					var msgHtml = '<div class="me_lists"><div class="header_img">' +
 							'<img src="'+ app.fileUrl + faceImg +'" width="40px" height="40px" />' + 
 							'</div>' +
 							'<div class="msg-wrapper left">' +
-							'<p class="msg-right-green">'+ msg +'</p>' +
+							'<p class="msg-right-green word_style">'+ msg +'</p>' +
 							'</div></div>';
 					var msgList = document.getElementById("msg");
 					msgList.insertAdjacentHTML("beforeend", msgHtml);
@@ -146,7 +147,7 @@
 								  '<img src="'+ app.fileUrl + friendFaceImage +'" width="40px" height="40px" />' + 
 								  '</div>' + 
 								  '<div class="msg-wrapper right">' +
-								  '<p class="msg-left-white">'+ msg +'</p>' +
+								  '<p class="msg-left-white word_style">'+ msg +'</p>' +
 								  '</div></div>';
 					var msgList = document.getElementById("msg");
 					msgList.insertAdjacentHTML("beforeend", msgHtml);
@@ -172,7 +173,7 @@
 							'<img src="'+ app.fileUrl + myFaceImg +'" width="40px" height="40px" />' + 
 							'</div>' +
 							'<div class="msg-wrapper left">' +
-							'<p class="msg-right-green">'+ singleMsg.msg +'</p>' +
+							'<p class="msg-right-green word_style" >'+ singleMsg.msg +'</p>' +
 							'</div></div>';
 					} else {
 						chatHistoryHtml += '<div class="friend_lists">' +
@@ -180,7 +181,7 @@
 								  '<img src="'+ app.fileUrl + friendFaceImage +'" width="40px" height="40px" />' + 
 								  '</div>' + 
 								  '<div class="msg-wrapper right">' +
-								  '<p class="msg-left-white">'+ singleMsg.msg +'</p>' +
+								  '<p class="msg-left-white word_style">'+ singleMsg.msg +'</p>' +
 								  '</div></div>';
 					}
 				}
