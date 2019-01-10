@@ -18,12 +18,12 @@
 </head>
 <body>
 	<header class="mui-bar mui-bar-nav title">
-	    <h1 class="mui-title title-color"><b id="b_header">园聊<b></h1>
+	    <h1 class="mui-title title-color"><b id="b_header">缘信<b></h1>
 	</header>
 	<nav class="mui-bar mui-bar-tab">
 	    <a class="mui-tab-item mui-active" tabIndex = "0">
 	        <span class="mui-icon mui-icon-weixin"></span>
-	        <span class="mui-tab-label">园聊</span>
+	        <span class="mui-tab-label">缘信</span>
 	    </a>
 	    <a class="mui-tab-item" tabIndex = "1">
 	        <span class="mui-icon mui-icon-phone"></span>
@@ -89,10 +89,10 @@
 			//批量绑定tap事件，展示页面
 			mui(".mui-bar-tab").on("tap", "a", function() {
 				var tabIndex = this.getAttribute("tabIndex");
-				plus.webview.show(tyArray[tabIndex].pageId, "fade-in", 200);
+				plus.webview.show(tyArray[tabIndex].pageId, "fade-in", 100);
 				for (var i = 0;i < tyArray.length; i++) {
 					if(i != tabIndex) {
-						plus.webview.hide(tyArray[i].pageId, "fade-out", 200);
+						plus.webview.hide(tyArray[i].pageId, "fade-out", 100);
 					}
 				}
 			});
@@ -105,9 +105,9 @@
 				var networkType = plus.networkinfo.getCurrentType();
 				var b_header = document.getElementById("b_header");
 				if(networkType != 0 && networkType != 1) {
-					b_header.innerHTML = "园信";
+					b_header.innerHTML = "缘信";
 				} else {
-					b_header.innerHTML = "园信(未连接网络...)";
+					b_header.innerHTML = "缘信(未连接网络...)";
 				}
 			});
 		}
