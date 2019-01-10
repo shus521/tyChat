@@ -1,9 +1,11 @@
 window.app = {
-	serverUrl : 'http://192.168.43.200:8080',
+	serverUrl : 'http://120.77.212.208:8080',
+//	serverUrl : 'http://192.168.43.200:8080',
 //	serverUrl : 'http://192.168.1.104:8080',
 	fileUrl : 'http://47.93.36.58:88/ty/',
 //	wsUrl : 'ws://192.168.1.104:8088/ws',
-	wsUrl : 'ws://192.168.43.200:8088/ws',
+//	wsUrl : 'ws://192.168.43.200:8088/ws',
+	wsUrl : 'ws://120.77.212.208:8088/ws',
 	/**
 	 * 判断字符串是否为空
 	 * @param {Object} str
@@ -20,7 +22,7 @@ window.app = {
 	 * @param {Object} type
 	 */
 	showTip: function(msg, type) {
-		plus.nativeUI.toast(msg, {icon: "image/" + type + ".png",verticalAlign:"center"})
+		plus.nativeUI.toast(msg, {icon: "../../image/" + type + ".png",verticalAlign:"center"})
 	},
 	/**
 	 * 设置全局用户缓存
@@ -69,6 +71,7 @@ window.app = {
 	CHAT:      2, //"聊天消息"),	
 	SIGNED:    3, //"消息签收"),
 	KEEPALIVE: 4, //"客户端保持心跳"),
+	PULL_FRIEND: 5,
 	/**
 	 * 和后端的 ChatMsg 聊天模型对象保持一致
 	 * @param {Object} senderId

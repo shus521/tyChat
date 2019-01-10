@@ -1,9 +1,12 @@
 package com.tyss.service.impl;
 
+import com.tyss.enums.MsgActionEnum;
 import com.tyss.enums.MsgSignFlagEnum;
 import com.tyss.enums.SearchFriendsStatusEnum;
 import com.tyss.mapper.*;
 import com.tyss.netty.ChatMsg;
+import com.tyss.netty.DataContent;
+import com.tyss.netty.UserChannelRel;
 import com.tyss.pojo.FriendsRequest;
 import com.tyss.pojo.MyFriends;
 import com.tyss.pojo.Users;
@@ -12,7 +15,10 @@ import com.tyss.pojo.vo.MyFriendsVO;
 import com.tyss.service.UserService;
 import com.tyss.utils.FastDFSClient;
 import com.tyss.utils.FileUtils;
+import com.tyss.utils.JsonUtils;
 import com.tyss.utils.QRCodeUtils;
+import io.netty.channel.Channel;
+import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
 import org.n3r.idworker.Sid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -201,6 +207,14 @@ public class UserServiceImpl implements UserService {
         saveFriends(sendUserId, acceptUserId);
         saveFriends(acceptUserId, sendUserId);
         deleteFriendRequest(sendUserId, acceptUserId);
+
+        //推送请求给请求方,让加好友方可以更新通讯录
+        Channel channel = UserChannelRel.get(sendUserId);
+        if (channel != null) {
+            DataContent dataContent = new DataContent();
+            dataContent.setAction(MsgActionEnum.PULL_FRIEND.type);
+            channel.writeAndFlush(new TextWebSocketFrame(JsonUtils.objectToJson(dataContent)));
+        }
     }
 
     @Transactional(propagation = Propagation.REQUIRED)

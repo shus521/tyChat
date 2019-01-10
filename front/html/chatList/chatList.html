@@ -46,7 +46,6 @@
 				//加载好友请求记录
 				var thisWebview = plus.webview.currentWebview();
 				thisWebview.addEventListener("show", function() {
-					console.log("333");
 					getFriendsRequests();
 				});
 				
@@ -134,7 +133,14 @@
 				},
 				wsmsg: function(e) {
 					console.log("接受到消息：" + e.data);
-					var chatMsg = JSON.parse(e.data);
+					var dataContent = JSON.parse(e.data);
+					var action = dataContent.action;
+					if (action === app.PULL_FRIEND) {
+						plus.webview.getWebviewById("contact.html").reload(true);
+						return true;
+					}
+					
+					var chatMsg = dataContent.chatMsg;
 					var msg = chatMsg.msg;
 					var friendUserId = chatMsg.senderId;
 					
@@ -173,7 +179,6 @@
 			
 			function getFriendsRequests() {
 				var user = app.getUserGlobalInfo();
-				console.log(user.id);
 				mui.ajax(app.serverUrl + "/u/queryFriendRequests?userId=" + user.id,{
 					data:{},
 					dataType:'json',//服务器返回json格式数据
@@ -258,6 +263,7 @@
 			
 			//渲染聊天快照
 			function loadingChatSnapshot() {
+				console.log("aaaaaaaaa");
 				var user = app.getUserGlobalInfo();
 				var chatSnapshotList = app.getUserChatSnapshot(user.id);
 				

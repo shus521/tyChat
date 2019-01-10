@@ -183,8 +183,8 @@ footer {
 }
 
 .word_style {
-	word-wrap: break-word;
+/*	word-wrap: break-word;*/	
 	word-break: break-all;
-	white-space: normal;
+	/*white-space: normal;*/
 	text-align:left;
 }
