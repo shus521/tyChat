@@ -79,7 +79,7 @@ public class UserServiceImpl implements UserService {
         String userId = sid.nextShort();
 
 //        生成二维码
-        String qrcodePath ="E://ty/user" + userId + "qrcode.png";
+        String qrcodePath ="./tyChat/user" + userId + "qrcode.png";
         qrCodeUtils.createQRCode(qrcodePath, "ty_qrcode:" + user.getUsername());
         MultipartFile multipartFile= FileUtils.fileToMultipart(qrcodePath);
 
