@@ -12,6 +12,9 @@ import com.tyss.utils.FastDFSClient;
 import com.tyss.utils.FileUtils;
 import com.tyss.utils.IMoocJSONResult;
 import com.tyss.utils.MD5Utils;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +32,8 @@ public class UserController {
     @Autowired
     private FastDFSClient fastDFSClient;
 
+    @ApiOperation(value = "登录注册", notes = "用户存在则登录，不存在则注册")
+    @ApiImplicitParam(name = "user", value = "用户实体", required = true, dataType = "User")
     @PostMapping("/registOrLogin")
     public IMoocJSONResult registOrLogin(@RequestBody Users user) throws Exception {
 
@@ -59,7 +64,8 @@ public class UserController {
         return IMoocJSONResult.ok(usersVO);
     }
 
-
+    @ApiOperation(value = "上传头像")
+    @ApiImplicitParam(name = "usersBO", value = "用户实体", required = true, dataType = "UsersBO")
     @PostMapping("/uploadFaceBase64")
     public IMoocJSONResult uploadFaceBase64(@RequestBody UsersBO usersBO) throws Exception {
         /* 获取前端上传的base64字符串，转换为文件对象 */
@@ -93,6 +99,8 @@ public class UserController {
      * @return
      * @throws Exception
      */
+    @ApiOperation(value = "修改昵称")
+    @ApiImplicitParam(name = "usersBO", value = "用户实体", required = true, dataType = "UsersBO")
     @PostMapping("/setNickname")
     public IMoocJSONResult setNickname(@RequestBody UsersBO usersBO) throws Exception {
         if ("".equals(usersBO.getNickname()) || usersBO.getNickname() == null) {
@@ -109,7 +117,11 @@ public class UserController {
         return IMoocJSONResult.ok(user);
     }
 
-
+    @ApiOperation(value = "搜索用户")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "myUserId", value = "当前用户Id", required = true, dataType = "String"),
+            @ApiImplicitParam(name = "friendUsername", value = "搜索用户名", required = true, dataType = "String")
+    })
     @PostMapping("/searchUser")
     public IMoocJSONResult searchUser(String myUserId, String friendUsername) throws Exception {
         if (StringUtils.isBlank(myUserId)
@@ -130,7 +142,11 @@ public class UserController {
 
     }
 
-
+    @ApiOperation(value = "发送添加好友请求")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "myUserId", value = "当前用户Id", required = true, dataType = "String"),
+            @ApiImplicitParam(name = "friendUsername", value = "搜索用户名", required = true, dataType = "String")
+    })
     @PostMapping("/addFriendRequest")
     public IMoocJSONResult addFriendRequest(String myUserId, String friendUsername) throws Exception {
         if (StringUtils.isBlank(myUserId)
@@ -148,6 +164,8 @@ public class UserController {
         return IMoocJSONResult.ok();
     }
 
+    @ApiOperation(value = "查询用户接收到的好友请求")
+    @ApiImplicitParam(name = "userId", value = "当前用户Id", required = true, dataType = "String")
     @PostMapping("/queryFriendRequests")
     public IMoocJSONResult queryFriendRequests(String userId) throws Exception {
         if (StringUtils.isBlank(userId)) {
@@ -165,6 +183,12 @@ public class UserController {
      * @return
      * @throws Exception
      */
+    @ApiOperation(value = "通过或者忽略好友请求")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "acceptUserId", value = "接收方用户id", required = true, dataType = "String"),
+            @ApiImplicitParam(name = "sendUserId", value = "发送方用户id", required = true, dataType = "String"),
+            @ApiImplicitParam(name = "operType", value = "类型 1通过 2忽略", required = true, dataType = "Int")
+    })
     @PostMapping("/operFriendRequest")
     public IMoocJSONResult operFriendRequest(String acceptUserId, String sendUserId, Integer operType) throws Exception {
         if (StringUtils.isBlank(acceptUserId) || StringUtils.isBlank(sendUserId) || operType == null) {
@@ -195,6 +219,8 @@ public class UserController {
      * @return
      * @throws Exception
      */
+    @ApiOperation(value = "查询我的好友列表")
+    @ApiImplicitParam(name = "userId", value = "当前用户Id", required = true, dataType = "String")
     @PostMapping("/myFriends")
     public IMoocJSONResult myFriends(String userId) throws Exception {
         if (StringUtils.isBlank(userId)) {
@@ -212,6 +238,8 @@ public class UserController {
      * @return
      * @throws Exception
      */
+    @ApiOperation(value = "用户手机端获取未签收的消息列表")
+    @ApiImplicitParam(name = "acceptUserId", value = "接收方Id", required = true, dataType = "String")
     @PostMapping("/getUnreadMsgList")
     public IMoocJSONResult getUnreadMsgList(String acceptUserId) throws Exception {
         if (StringUtils.isBlank(acceptUserId)) {
