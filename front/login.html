@@ -80,6 +80,7 @@
 		<script type="text/javascript">
 			
 			mui.plusReady(function() {
+				console.log(JSON.stringify(plus.webview.all()));
 				//判断用户是否已登录
 				var userInfo = app.getUserGlobalInfo();
 				if(userInfo != null) {
@@ -127,8 +128,18 @@
 									var userInfoJson = data.data;
 									app.setUserGlobalInfo(userInfoJson);
 									
-									//页面跳转
-									mui.openWindow("index.html", "index.html");
+									//若index.html的webview为null，则为第一次登录，直接打开即可，若非第一次登录，则先刷新再处理
+									if (plus.webview.getWebviewById("index.html") != null) {
+										//webView为预加载，换账号登录后需要重新加载一下，否则显示的还是上个账号的信息
+										plus.webview.getWebviewById("chatList.html").reload(true);
+										plus.webview.getWebviewById("contact.html").reload(true);
+										plus.webview.getWebviewById("myHome.html").reload(true);
+										plus.webview.getWebviewById("discover.html").reload(true);
+										plus.webview.getWebviewById("index.html").reload(true);
+										mui.openWindow("chatList.html", "chatList.html");
+									} else{
+										mui.openWindow("index.html", "index.html");
+									}
 								} else {
 									app.showTip(data.msg,"error");
 									return false;
