@@ -15,7 +15,7 @@
 		        <li class="mui-table-view-cell mui-media">
 		            <a href="javascript:;" id="link_my_face">
 		            	<span class="mui-pull-right mui-icon mui-icon-arrowright" style="line-height: 42px;color: lightgrey; margin-left: 3px;"></span>
-		                <img class="mui-media-object mui-pull-right" id="img_my_face" src="css/registLogin/arrow.jpg">
+		                <img class="mui-media-object mui-pull-right" id="img_my_face" src="../../css/registLogin/arrow.jpg">
 		                <div class="mui-media-body" style="line-height: 42px;font-size: 16px;">
 		                    头像
 		                </div>
@@ -74,6 +74,9 @@
 				//页面跳转我的头像
 				var link_my_face = document.getElementById("link_my_face");
 				link_my_face.addEventListener("tap", function() {
+					if (plus.webview.getWebviewById("myFace.html") != null) {
+						plus.webview.getWebviewById("myFace.html").reload();
+					}
 					mui.openWindow("myFace.html", "myFace.html");
 				});
 				
@@ -98,7 +101,6 @@
 					mui.openWindow("../../login.html", "login.html");
 				});
 				
-				
 				//添加自定义事件刷新头像
 				window.addEventListener("refresh", function() {
 					refreshUserInfo();
@@ -117,6 +119,7 @@
 					
 					span_nickname.innerHTML = nickname;
 					span_username.innerHTML = username;
+					//无头像时给予默认头像
 					if(app.isNotNull(faceImg)) {
 						var img_my_face = document.getElementById("img_my_face");
 						img_my_face.src = app.fileUrl + faceImg;

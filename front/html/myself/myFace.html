@@ -51,6 +51,8 @@
 					var faceImg = user.faceImage;
 					if(app.isNotNull(faceImg)) {
 						img_my_face.src = app.fileUrl + faceImg;
+					} else {
+						img_my_face.src = "../../css/registLogin/arrow.jpg";
 					}
 				}
 				
